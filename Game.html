@@ -35,13 +35,13 @@
 				camera.position.y = 5;
 
 				//adding the floor
-				let floorGeometry = new THREE.PlaneGeometry(5000, 5000, 1, 1);
-				let floorMaterial = new THREE.MeshPhongMaterial({
-  				color: "green",
-  				shininess: 0,
-				});
-				
-				let floor = new THREE.Mesh(floorGeometry, floorMaterial);
+				var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+
+				var texture = THREE.ImageUtils.loadTexture( "floor_texture.jpg" );
+				texture.wrapT = THREE.RepeatWrapping;
+				var material = new THREE.MeshLambertMaterial({ map : texture });
+
+				var floor = new THREE.Mesh(floorGeometry, material);
 				floor.rotation.x = -0.5 * Math.PI; // This is 90 degrees by the way
 				floor.receiveShadow = true;
 				floor.position.y = 0;
