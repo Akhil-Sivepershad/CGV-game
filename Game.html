@@ -27,13 +27,13 @@
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
 				document.body.appendChild(renderer.domElement);
-			
+
 				// Add a camera
 				var camera = new THREE.PerspectiveCamera(50,window.innerWidth / window.innerHeight,0.1,1000);
 				camera.position.z = 30;
 				camera.position.x = 0;
 				camera.position.y = 5;
-
+			
 				//adding the floor
 				var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
 
@@ -53,6 +53,9 @@
 				function(gltf) {
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
+				model.position.x = 10;
+				model.position.y = 0;
+				model.position.z = 5;
 				scene.add(model);
 				},
 				undefined,
@@ -82,12 +85,36 @@
 				dirLight.shadow.camera.bottom = d * -1;
 				// Add directional Light to scene
 				scene.add(dirLight);
+								
+				document.onkeydown = function(e){
+					if (e.keyCode==37){
+						model.position.x -= 1;
+						camera.position.x -= 1;
+						console.log(e);
+					}
+					if (e.keyCode==39){
+						model.position.x += 1;
+						camera.position.x += 1;
+					}
+					if (e.keyCode==38){
+						model.position.z -= 1;
+						camera.position.z -= 1;
+					}
+					if (e.keyCode==40){
+						model.position.z += 1;
+						camera.position.z += 1;
+					}
+	
+				}
+				// Add a camera
 				renderer.render(scene,camera);
-
 				function animate() {
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
+
+
+
 				animate();
 			}
 			
