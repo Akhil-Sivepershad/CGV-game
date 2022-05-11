@@ -23,20 +23,20 @@
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				var wallMat = new THREE.MeshLambertMaterial({ map : wallTexture });
 				var wall = new THREE.Mesh(wallGeometry, wallMat);
-
-				scene.add(wall);
+				return wall;
 			}
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
-				var floorTexture = THREE.ImageUtils.loadTexture( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
+				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
+				floorTexture.wrapS = THREE.RepeatWrapping;
+				floorTexture.repeat.set(50,50);
 				var floorMat = new THREE.MeshLambertMaterial({ map : floorTexture});
-				var floorMesh = new THREE.Mesh(floorGeometry, floorMat);
-				floorMesh.rotation.x = -0.5 * Math.PI;
-				scene.add(floorMesh);
+				var floor = new THREE.Mesh(floorGeometry, floorMat);
+				floor.rotation.x = -0.5 * Math.PI;
+				return floor;			
 			}
-			
 
 			Init();
 			
@@ -55,10 +55,10 @@
 				camera.position.y = 5;
 			
 				//adding the floor
-				floor();
+				scene.add(floor());
 
 				//adding the wall
-				wall();
+				//scene.add(wall());
 
 				//importing the character
 				var loader = new THREE.GLTFLoader();
