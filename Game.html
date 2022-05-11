@@ -12,7 +12,29 @@
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 		<script>
 			const canvas = document.querySelector('#c');
-			
+
+			class CharacterControls{
+				//model= THREE.Group;
+				//camera=THREE.camera;
+				//number=3;
+
+				//currentAction=String;
+
+				//constructor(model= THREE.Group,camera=THREE.camera){
+				constructor(model,camera){
+					this.model=model;
+					this.camera=camera;
+					this.number=3;
+					//this.currentAction=currentAction;
+				}
+
+				update(delta, keysPressed){//delta is frame number
+					console.log("test");
+				}
+				print(){
+					console.log(4);
+				}
+			}
 			// Initialise the scene
 			const scene = new THREE.Scene();
 			scene.background = new THREE.Color("white");
@@ -64,6 +86,7 @@
 				wall();
 
 				//importing the character
+				let modelControls=new CharacterControls();
 				var loader = new THREE.GLTFLoader();
 				loader.load("Object_models/witch_cartoonish_character3.glb",
 				function(gltf) {
@@ -73,12 +96,17 @@
 				model.position.y = 0;
 				model.position.z = 5;
 				scene.add(model);
+				modelControls=new CharacterControls(model,camera,'idle');
+				
 				},
 				undefined,
 				function(error) {
 				console.error(error);
 				}
 				);
+				modelControls.print();
+				
+				
 
 				// Add lights
 				let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
@@ -99,14 +127,22 @@
 				dirLight.shadow.camera.bottom = d * -1;
 				// Add directional Light to scene
 				scene.add(dirLight);
-				
+
+				//control keys
+				const keysPressed ={ };
+				document.addEventListener('keydown', (event)=>{
+					(keysPressed)[event.key.toLowerCase()]=true
+				},false);
+				document.addEventListener('keyup', (event)=>{
+					(keysPressed)[event.key.toLowerCase()]=false
+				},false);
+
 				//Allows the character to move:
 				document.onkeydown = function(e){
 					if (e.keyCode==37){
 						model.position.x -= 1;
 						camera.position.x -= 1;
-						console.log(e);
-					}
+											}
 					if (e.keyCode==39){
 						model.position.x += 1;
 						camera.position.x += 1;
@@ -124,8 +160,13 @@
 
 				// Add a camera
 				renderer.render(scene,camera);
+				const clock= new THREE.Clock();
 
 				function animate() {
+					let mixerUpdateDelta = clock.getDelta();
+					if (modelControls){
+						modelControls.update(mixerUpdateDelta, keysPressed);
+					}
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
