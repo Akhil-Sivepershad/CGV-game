@@ -1,1 +1,3 @@
-Floor texture from https://www.filterforge.com/filters/7547-v6.html.
+All textures downloaded from Textures.com:
+Floor texture - TexturesCom_FloorsMedieval0084_2_S.jpg
+Wall texture - TexturesCom_BrickOldDirty0132_1_seamless_S.jpg
