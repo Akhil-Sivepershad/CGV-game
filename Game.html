@@ -18,14 +18,167 @@
 			scene.background = new THREE.Color("white");
 
 			function wall(){
-				var wallGeometry = new THREE.BoxGeometry(50,50,1);
+				var wallGeometry = new THREE.BoxGeometry(30,30,1);
 				var wallTexture = THREE.ImageUtils.loadTexture( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				var wallMat = new THREE.MeshLambertMaterial({ map : wallTexture });
-				var wall = new THREE.Mesh(wallGeometry, wallMat);
-
-				scene.add(wall);
+				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
+				return walltmp;
 			}
+
+			function wallShort(){
+					var wallGeometry = new THREE.BoxGeometry(10, 30, 1);
+					var wallTexture = THREE.ImageUtils.loadTexture("Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg");
+					wallTexture.wrapT = THREE.RepeatWrapping;
+					var wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
+					var walltmp = new THREE.Mesh(wallGeometry, wallMat);
+					return walltmp;
+			}
+
+			function maze(){
+				var maze = new THREE.Object3D();
+				maze.add(wall());
+				maze.add(wall().translateX(30));
+				maze.add(wall().translateX(-30));
+
+                maze.add(wallShort().translateX(-10).translateZ(5).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(45).translateZ(15).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(45).translateZ(30).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(45).translateZ(45).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateZ(60));
+				maze.add(wall().translateX(30).translateZ(60));
+				maze.add(wall().translateX(60).translateZ(60));
+				maze.add(wall().translateX(70).translateZ(60));
+				maze.add(wall().translateX(60).translateZ(30));
+				maze.add(wall().translateX(75).translateZ(30));
+
+				maze.add(wallShort().translateX(60).translateZ(55).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(70).translateZ(35));
+				maze.add(wallShort().translateX(80).translateZ(35));
+				maze.add(wallShort().translateX(85).translateZ(40).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(50).translateZ(20));
+				maze.add(wall().translateX(100).translateZ(45));
+
+				maze.add(wall().translateX(115).translateZ(45).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(115).translateZ(60).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(120).translateZ(30));
+				maze.add(wallShort().translateX(130).translateZ(30));
+				maze.add(wallShort().translateX(135).translateZ(35).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(140).translateZ(40));
+				maze.add(wallShort().translateX(150).translateZ(40));
+				maze.add(wall().translateX(155).translateZ(55).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(155).translateZ(70).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(140).translateZ(60));
+				maze.add(wallShort().translateX(150).translateZ(60));
+				maze.add(wallShort().translateX(115).translateZ(80).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(120).translateZ(85));
+                maze.add(wall().translateX(135).translateZ(85).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(100).translateZ(85));
+				maze.add(wallShort().translateX(95).translateZ(90).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(90).translateZ(95));
+				maze.add(wallShort().translateX(85).translateZ(90).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(70).translateZ(85));
+				maze.add(wallShort().translateX(50).translateZ(85));
+				maze.add(wall().translateX(45).translateZ(100).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(40).translateZ(100));
+				maze.add(wallShort().translateX(30).translateZ(100));
+				maze.add(wallShort().translateX(35).translateZ(95).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateX(15).translateZ(100).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(10).translateZ(100));
+				maze.add(wallShort().translateX(20).translateZ(115));
+				maze.add(wallShort().translateX(30).translateZ(115));
+				maze.add(wallShort().translateX(35).translateZ(120).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(50).translateZ(125));
+				maze.add(wall().translateX(80).translateZ(125));
+				maze.add(wall().translateX(-5).translateZ(100).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateX(80).translateZ(110));
+				maze.add(wallShort().translateX(65).translateZ(105).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(100).translateZ(110));
+				maze.add(wall().translateX(115).translateZ(115).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(120).translateZ(130));
+				maze.add(wallShort().translateX(130).translateZ(130));
+				maze.add(wallShort().translateX(140).translateZ(130));
+				maze.add(wallShort().translateX(135).translateZ(105).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(150).translateZ(130));
+				maze.add(wall().translateX(155).translateZ(130).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(135).translateZ(135).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateX(150).translateZ(100));
+				maze.add(wallShort().translateX(170).translateZ(100));
+				maze.add(wall().translateX(130).translateZ(145));
+				maze.add(wallShort().translateX(150).translateZ(145));
+				maze.add(wallShort().translateX(115).translateZ(140).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(100).translateZ(135));
+				maze.add(wallShort().translateX(45).translateZ(130).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(40).translateZ(135));
+				maze.add(wallShort().translateX(35).translateZ(140).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(30).translateZ(145));
+				maze.add(wall().translateX(25).translateZ(140).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(10).translateZ(125));
+				maze.add(wallShort().translateX(20).translateZ(125));
+				maze.add(wall().translateX(5).translateZ(130).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(5).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(0).translateZ(115));
+				maze.add(wall().translateX(15).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(15).translateZ(170).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(85).translateZ(140).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateX(-20).translateZ(85));
+				maze.add(wall().translateX(-40).translateZ(85));
+				maze.add(wallShort().translateX(-55).translateZ(90).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-60).translateZ(95));
+				maze.add(wall().translateX(-65).translateZ(100).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-10).translateZ(130));
+				maze.add(wallShort().translateX(-50).translateZ(120));
+				maze.add(wallShort().translateX(-55).translateZ(125).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-70).translateZ(130));
+				maze.add(wallShort().translateX(-90).translateZ(130));
+				maze.add(wall().translateX(-70).translateZ(145));
+				maze.add(wall().translateX(-45).translateZ(160).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-50).translateZ(145));
+				maze.add(wall().translateX(-80).translateZ(160));
+				maze.add(wall().translateX(-95).translateZ(145).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-5).translateZ(145).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-20).translateZ(160));
+				maze.add(wallShort().translateX(-70).translateZ(85));
+				maze.add(wallShort().translateX(-45).translateZ(105).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-45).translateZ(115).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-15).translateZ(115).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-35).translateZ(145).rotateY(Math.PI / 2));
+
+				maze.add(wall().translateX(-30).translateZ(100));
+				maze.add(wall().translateX(-15).translateZ(45).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-30).translateZ(40));
+				maze.add(wallShort().translateX(-40).translateZ(15));
+				maze.add(wallShort().translateX(-50).translateZ(15));
+				maze.add(wall().translateX(-55).translateZ(10).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-55).translateZ(-10).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-70).translateZ(25));
+				maze.add(wall().translateX(-70).translateZ(-25));
+				maze.add(wall().translateX(-70).translateZ(40).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-75).translateZ(55));
+				maze.add(wallShort().translateX(-80).translateZ(60).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(-65).translateZ(65));
+				maze.add(wallShort().translateX(-45).translateZ(55));
+				maze.add(wallShort().translateX(-50).translateZ(60).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-45).translateZ(35).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-30).translateZ(25));
+				maze.add(wallShort().translateX(-30).translateZ(15));
+				maze.add(wallShort().translateX(-25).translateZ(20).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(-30).translateZ(45).rotateY(Math.PI / 2));	
+
+				//side floating
+				maze.add(wall().translateX(-70).translateZ(0).rotateY(Math.PI / 2));
+				
+				//bottom of the maze
+				maze.add(wall().translateX(-50).translateZ(175));
+				return maze;
+			}
+
+			
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
@@ -50,15 +203,17 @@
 
 				// initialise the camera
 				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight,1,1000);
-				camera.position.z = 30;
+				camera.position.z = 100;
 				camera.position.x = 0;
-				camera.position.y = 5;
+				camera.position.y = 70;
 			
 				//adding the floor
 				floor();
 
 				//adding the wall
-				wall();
+				//scene.add(wall());
+
+				scene.add(maze());
 
 				//importing the character
 				var loader = new THREE.GLTFLoader();
@@ -68,7 +223,7 @@
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 10;
 				model.position.y = 0;
-				model.position.z = 5;
+				model.position.z = -15;
 				scene.add(model);
 				},
 				undefined,
@@ -102,7 +257,7 @@
 					if (e.keyCode==37){
 						model.position.x -= 1;
 						camera.position.x -= 1;
-						console.log(e);
+						//console.log(e);
 					}
 					if (e.keyCode==39){
 						model.position.x += 1;
