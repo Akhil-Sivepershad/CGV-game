@@ -10,6 +10,7 @@
 	<body>
 		<script src="Js/three.js"></script>
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		<script>
 			const canvas = document.querySelector('#c');
 
@@ -25,19 +26,18 @@
 				fadeDuration =0.2
 				velocity=20
 
-				constructor(model,camera,currentAction){
+				constructor(model,camera,currentAction,orbitControl){
 					this.model=model;
 					this.camera=camera;
 					this.number=3;
 					this.currentAction=currentAction;
+					this.orbitControl = orbitControl;
 				}
 
 				directionOffset(keysPressed){
 					var directionOffset = Math.PI //arrow up
-
 					if (keysPressed['arrowdown']) {
-						directionOffset = 0 //arrow down
-						
+						directionOffset = 0 //arrow down						
 					}
 					else if (keysPressed['arrowleft']) {
 						directionOffset = -Math.PI / 2 //arrow left
@@ -45,9 +45,17 @@
 					else if (keysPressed['arrowright']) {
 						directionOffset = Math.PI / 2 //arrow right
 					}
-					return directionOffset
+					return directionOffset		
+				}
+				updateCameraTarget(moveX, moveZ) {
+					this.camera.position.x -= moveX
+            		this.camera.position.z -= moveZ
+					// update camera target
+					this.cameraTarget.x = this.model.position.x
+					this.cameraTarget.y = this.model.position.y 
+					this.cameraTarget.z = this.model.position.z
+					this.orbitControl.target = this.cameraTarget
 
-		
 				}
 
 				update(delta, keysPressed){//delta is frame number
@@ -490,6 +498,12 @@
 				camera.position.z = 40;
 				camera.position.x = 0;
 				camera.position.y = 9;
+
+				//add orbit control
+				controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.enabled = true;
+				//controls.minDistance = 700;
+				//controls.maxDistance = 1500;
 			
 				//adding the floor
 				scene.add(floor());
@@ -507,11 +521,11 @@
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 0;
-				model.position.y = 0;
+				model.position.y = -0.2;
 				model.position.z = 5;
 				model.rotation.y=Math.PI;
 				scene.add(model);
-				modelControls=new CharacterControls(model,camera,'idle');
+				modelControls=new CharacterControls(model,camera,'idle',controls);
 				
 				},
 				undefined,
@@ -552,36 +566,15 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				//Allows the character to move:
-				/*document.onkeydown = function(e){
-					if (e.keyCode==37){
-						model.position.x -= 1;
-						camera.position.x -= 1;
-											}
-					if (e.keyCode==39){
-						model.position.x += 1;
-						camera.position.x += 1;
-					}
-					if (e.keyCode==38){
-						model.position.z -= 1;
-						camera.position.z -= 1;
-					}
-					if (e.keyCode==40){
-						model.position.z += 1;
-						camera.position.z += 1;
-					}
-	
-				}*/
-
-				// Add a camera
 				renderer.render(scene,camera);
 				const clock= new THREE.Clock();
-
+	
 				function animate() {
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
+					controls.update();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
