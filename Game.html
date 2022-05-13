@@ -12,7 +12,101 @@
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 		<script>
 			const canvas = document.querySelector('#c');
-			
+
+			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
+				
+				//temporary data
+				walkDirection= new THREE.Vector3();
+				rotateAngle= new THREE.Vector3(0,1,0);
+				rotateQuarternion=new THREE.Quaternion();
+				cameraTarget=new THREE.Vector3();
+
+				//constants
+				fadeDuration =0.2
+				velocity=20
+
+				constructor(model,camera,currentAction){
+					this.model=model;
+					this.camera=camera;
+					this.number=3;
+					this.currentAction=currentAction;
+				}
+
+				directionOffset(keysPressed){
+					var directionOffset = Math.PI //arrow up
+
+					if (keysPressed['arrowdown']) {
+						directionOffset = 0 //arrow down
+						
+					}
+					else if (keysPressed['arrowleft']) {
+						directionOffset = -Math.PI / 2 //arrow left
+					}
+					else if (keysPressed['arrowright']) {
+						directionOffset = Math.PI / 2 //arrow right
+					}
+					return directionOffset
+
+		
+				}
+
+				update(delta, keysPressed){//delta is frame number
+					var directionPressed=null;
+					var state='';
+					//console.log(typeof(keysPressed))
+					for(var key in keysPressed){
+						if(keysPressed[key]==true){
+							//console.log(key)
+							directionPressed=key
+							//console.log(keysPressed)
+						}
+						
+					}
+					if(directionPressed){
+						state='walk'
+					}
+					else{
+						state='idle'
+					}
+					if(this.currentAction!=state){
+						//changed from walk to idle or vise versa, this is where youd put the code for animations
+						this.currentAction=state;
+					}
+					if(this.currentAction=='walk'){
+						//calc direction towards the camera
+						var angleYCameraDirection = Math.atan2(
+                    	(this.camera.position.x - this.model.position.x), 
+                    	(this.camera.position.z - this.model.position.z))
+						//calc movement angle offset
+						var directionOffset= this.directionOffset(keysPressed)
+						//console.log(directionOffset)
+						// rotate model
+						this.rotateQuarternion.setFromAxisAngle(this.rotateAngle, angleYCameraDirection + directionOffset)
+           				this.model.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+						//this.camera.quaternion.rotateTowards(this.rotateQuarternion, 0.2)
+
+						// calculate direction
+            			this.camera.getWorldDirection(this.walkDirection)
+        			    this.walkDirection.y = 0
+            			this.walkDirection.normalize()
+            			this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
+
+						//move model and camera
+						const moveX = this.walkDirection.x * this.velocity * delta
+            			const moveZ = this.walkDirection.z * this.velocity * delta
+            			this.model.position.x -= moveX
+            			this.model.position.z -= moveZ
+            			//move the camera with them
+						this.camera.position.x -= moveX
+            			this.camera.position.z -= moveZ
+					}
+
+
+				}
+				print(){
+					console.log('the class function is working');
+				}
+			}
 			// Initialise the scene
 			const scene = new THREE.Scene();
 			scene.background = new THREE.Color("white");
@@ -208,10 +302,17 @@
 				document.body.appendChild(renderer.domElement);
 
 				// initialise the camera
+<<<<<<< HEAD
 				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight,1,1000);
 				camera.position.z = 100;
 				camera.position.x = 0;
 				camera.position.y = 70;
+=======
+				var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
+				camera.position.z = 40;
+				camera.position.x = 0;
+				camera.position.y = 9;
+>>>>>>> movenment
 			
 				//adding the floor
 				scene.add(floor());
@@ -225,21 +326,32 @@
 >>>>>>> 783ebfe52dbb78bfca80ea82e4f18d76b459d900
 
 				//importing the character
+				let modelControls=new CharacterControls();
 				var loader = new THREE.GLTFLoader();
 				loader.load("Object_models/witch_cartoonish_character3.glb",
 				function(gltf) {
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
-				model.position.x = 10;
+				model.position.x = 0;
 				model.position.y = 0;
+<<<<<<< HEAD
 				model.position.z = -15;
+=======
+				model.position.z = 5;
+				model.rotation.y=Math.PI;
+>>>>>>> movenment
 				scene.add(model);
+				modelControls=new CharacterControls(model,camera,'idle');
+				
 				},
 				undefined,
 				function(error) {
 				console.error(error);
 				}
 				);
+				modelControls.print();
+				
+				
 
 				// Add lights
 				let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
@@ -260,14 +372,27 @@
 				dirLight.shadow.camera.bottom = d * -1;
 				// Add directional Light to scene
 				scene.add(dirLight);
-				
+
+				//control keys
+				const keysPressed ={ };
+				document.addEventListener('keydown', (event)=>{
+					(keysPressed)[event.key.toLowerCase()]=true
+				},false);
+				document.addEventListener('keyup', (event)=>{
+					(keysPressed)[event.key.toLowerCase()]=false
+				},false);
+
 				//Allows the character to move:
-				document.onkeydown = function(e){
+				/*document.onkeydown = function(e){
 					if (e.keyCode==37){
 						model.position.x -= 1;
 						camera.position.x -= 1;
+<<<<<<< HEAD
 						//console.log(e);
 					}
+=======
+											}
+>>>>>>> movenment
 					if (e.keyCode==39){
 						model.position.x += 1;
 						camera.position.x += 1;
@@ -281,12 +406,17 @@
 						camera.position.z += 1;
 					}
 	
-				}
+				}*/
 
 				// Add a camera
 				renderer.render(scene,camera);
+				const clock= new THREE.Clock();
 
 				function animate() {
+					let mixerUpdateDelta = clock.getDelta();
+					if (modelControls){
+						modelControls.update(mixerUpdateDelta, keysPressed);
+					}
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
