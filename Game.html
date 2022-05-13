@@ -116,13 +116,8 @@
 				var wallTexture = THREE.ImageUtils.loadTexture( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				var wallMat = new THREE.MeshLambertMaterial({ map : wallTexture });
-<<<<<<< HEAD
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
 				return walltmp;
-=======
-				var wall = new THREE.Mesh(wallGeometry, wallMat);
-				return wall;
->>>>>>> 783ebfe52dbb78bfca80ea82e4f18d76b459d900
 			}
 
 			function wallShort(){
@@ -302,28 +297,18 @@
 				document.body.appendChild(renderer.domElement);
 
 				// initialise the camera
-<<<<<<< HEAD
-				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight,1,1000);
-				camera.position.z = 100;
-				camera.position.x = 0;
-				camera.position.y = 70;
-=======
 				var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
 				camera.position.z = 40;
 				camera.position.x = 0;
 				camera.position.y = 9;
->>>>>>> movenment
 			
 				//adding the floor
 				scene.add(floor());
 
 				//adding the wall
 				//scene.add(wall());
-<<<<<<< HEAD
 
 				scene.add(maze());
-=======
->>>>>>> 783ebfe52dbb78bfca80ea82e4f18d76b459d900
 
 				//importing the character
 				let modelControls=new CharacterControls();
@@ -334,12 +319,8 @@
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 0;
 				model.position.y = 0;
-<<<<<<< HEAD
-				model.position.z = -15;
-=======
 				model.position.z = 5;
 				model.rotation.y=Math.PI;
->>>>>>> movenment
 				scene.add(model);
 				modelControls=new CharacterControls(model,camera,'idle');
 				
@@ -387,12 +368,7 @@
 					if (e.keyCode==37){
 						model.position.x -= 1;
 						camera.position.x -= 1;
-<<<<<<< HEAD
-						//console.log(e);
-					}
-=======
 											}
->>>>>>> movenment
 					if (e.keyCode==39){
 						model.position.x += 1;
 						camera.position.x += 1;
