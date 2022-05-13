@@ -381,6 +381,11 @@
 				return floor;			
 			}
 
+			function miniMap()
+			{
+				const cameraOrtho = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
+			}
+
 			Init();
 			
 			function Init(){
