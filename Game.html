@@ -474,7 +474,7 @@
 				var floorMat = new THREE.MeshLambertMaterial({ map : floorTexture});
 				var floor = new THREE.Mesh(floorGeometry, floorMat);
 				floor.rotation.x = -0.5 * Math.PI;
-				return floor;			
+				return floor; 			
 			}
 
 			function miniMap()
@@ -514,7 +514,7 @@
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 0;
-				model.position.y = 0;
+				model.position.y = -0.2;
 				model.position.z = 5;
 				model.rotation.y=Math.PI;
 				scene.add(model);
@@ -578,7 +578,7 @@
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
-
+				
 				animate();
 			}
 			
