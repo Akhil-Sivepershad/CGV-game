@@ -9,6 +9,7 @@
 	</head>
 	<body>
 		<script src="Js/three.js"></script>
+		<script src="https://threejs.org/build/three.min.js"></script>
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		<script>
@@ -474,7 +475,7 @@
 			}
 
 			function floor(){
-				var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+				var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
 				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
 				floorTexture.wrapS = THREE.RepeatWrapping;
@@ -501,17 +502,48 @@
 				document.body.appendChild(renderer.domElement);
 
 				// initialise the camera
-				var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
+				var camera = new THREE.PerspectiveCamera(55,window.innerWidth / window.innerHeight,45,30000);
+				//camera.position.set(-900,-200,-900);
 				camera.position.z = 40;
 				camera.position.x = 0;
-				camera.position.y = 9;
+				camera.position.y = 20;
 
 				//add orbit control
-				controls = new THREE.OrbitControls(camera, renderer.domElement);
-				controls.enabled = true;
-				//controls.minDistance = 700;
-				//controls.maxDistance = 1500;
-			
+				let controls = new THREE.OrbitControls(camera, renderer.domElement);
+				//controls.addEventListener('change', renderer);
+				//controls.enabled = true;
+				controls.minDistance = 400;
+				controls.maxDistance = 400;
+				let materialArray = [];
+				let texture_ft = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_ft.png");
+				let texture_bk = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_bk.png");
+				let texture_up = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_up.png");
+				let texture_dn = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_dn.png");
+				let texture_rt = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_rt.png");
+				let texture_lf = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_lf.png");
+
+				/*let texture_ft = new THREE.TextureLoader().load("Textures/test/test_ft.png");
+				let texture_bk = new THREE.TextureLoader().load("Textures/test/test_bk.png");
+				let texture_up = new THREE.TextureLoader().load("Textures/test/test_up.png");
+				let texture_dn = new THREE.TextureLoader().load("Textures/test/test_dn.png");
+				let texture_rt = new THREE.TextureLoader().load("Textures/test/test_rt.png");
+				let texture_lf = new THREE.TextureLoader().load("Textures/test/test_lf.png");*/
+				
+				materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf}));
+
+				for (let i = 0; i < 6; i++) {
+					materialArray[i].side = THREE.BackSide;
+				}
+				let skyBovGeo = new THREE.BoxGeometry(500,500,500);
+				let skyBox = new THREE.Mesh(skyBovGeo, materialArray);
+				scene.add(skyBox);
+
+
 				//adding the floor
 				scene.add(floor());
 
