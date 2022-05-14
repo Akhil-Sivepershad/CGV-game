@@ -10,6 +10,7 @@
 	<body>
 		<script src="Js/three.js"></script>
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		<script>
 			const canvas = document.querySelector('#c');
 
@@ -25,19 +26,18 @@
 				fadeDuration =0.2
 				velocity=20
 
-				constructor(model,camera,currentAction){
+				constructor(model,camera,currentAction,orbitControl){
 					this.model=model;
 					this.camera=camera;
 					this.number=3;
 					this.currentAction=currentAction;
+					this.orbitControl = orbitControl;
 				}
 
 				directionOffset(keysPressed){
 					var directionOffset = Math.PI //arrow up
-
 					if (keysPressed['arrowdown']) {
-						directionOffset = 0 //arrow down
-						
+						directionOffset = 0 //arrow down						
 					}
 					else if (keysPressed['arrowleft']) {
 						directionOffset = -Math.PI / 2 //arrow left
@@ -45,9 +45,17 @@
 					else if (keysPressed['arrowright']) {
 						directionOffset = Math.PI / 2 //arrow right
 					}
-					return directionOffset
+					return directionOffset		
+				}
+				updateCameraTarget(moveX, moveZ) {
+					this.camera.position.x -= moveX
+            		this.camera.position.z -= moveZ
+					// update camera target
+					this.cameraTarget.x = this.model.position.x
+					this.cameraTarget.y = this.model.position.y 
+					this.cameraTarget.z = this.model.position.z
+					this.orbitControl.target = this.cameraTarget
 
-		
 				}
 
 				update(delta, keysPressed){//delta is frame number
@@ -113,24 +121,24 @@
 
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,30,1);
-				var wallTexture = THREE.ImageUtils.loadTexture( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
+				var wallTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				wallTexture.wrapS = THREE.RepeatWrapping;
-				wallTexture.repeat.set(3, 3);
+				wallTexture.repeat.set(3,3);
 				var wallMat = new THREE.MeshLambertMaterial({ map : wallTexture });
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
 				return walltmp;
 			}
 
 			function wallShort(){
-					var wallGeometry = new THREE.BoxGeometry(10, 30, 1);
-					var wallTexture = THREE.ImageUtils.loadTexture("Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg");
-					wallTexture.wrapT = THREE.RepeatWrapping;
-					wallTexture.wrapS = THREE.RepeatWrapping;
-					wallTexture.repeat.set(3, 3);
-					var wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
-					var walltmp = new THREE.Mesh(wallGeometry, wallMat);
-					return walltmp;
+				var wallGeometry = new THREE.BoxGeometry(10, 30, 1);
+				var wallTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
+				wallTexture.wrapT = THREE.RepeatWrapping;
+				wallTexture.wrapS = THREE.RepeatWrapping;
+				wallTexture.repeat.set(3,3);
+				var wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
+				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
+				return walltmp;
 			}
 
 			function maze(){
@@ -474,7 +482,7 @@
 				var floorMat = new THREE.MeshLambertMaterial({ map : floorTexture});
 				var floor = new THREE.Mesh(floorGeometry, floorMat);
 				floor.rotation.x = -0.5 * Math.PI;
-				return floor;			
+				return floor; 			
 			}
 
 			function miniMap()
@@ -486,7 +494,7 @@
 			
 			function Init(){
 				// Initialise the renderer
-				const renderer = new THREE.WebGLRenderer();
+				const renderer = new THREE.WebGLRenderer({ antialias: true });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
@@ -497,6 +505,12 @@
 				camera.position.z = 40;
 				camera.position.x = 0;
 				camera.position.y = 9;
+
+				//add orbit control
+				controls = new THREE.OrbitControls(camera, renderer.domElement);
+				controls.enabled = true;
+				//controls.minDistance = 700;
+				//controls.maxDistance = 1500;
 			
 				//adding the floor
 				scene.add(floor());
@@ -511,11 +525,11 @@
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 0;
-				model.position.y = 0;
+				model.position.y = -0.2;
 				model.position.z = 5;
 				model.rotation.y=Math.PI;
 				scene.add(model);
-				modelControls=new CharacterControls(model,camera,'idle');
+				modelControls=new CharacterControls(model,camera,'idle',controls);
 				
 				},
 				undefined,
@@ -528,24 +542,10 @@
 				
 
 				// Add lights
-				let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
+				let hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.9);
 				hemiLight.position.set(0, 50, 0);
 				// Add hemisphere light to scene
 				scene.add(hemiLight);
-
-				let d = 8.25;
-				let dirLight = new THREE.DirectionalLight(0xffffff, 0.54);
-				dirLight.position.set(-8, 12, 8);
-				dirLight.castShadow = true;
-				dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
-				dirLight.shadow.camera.near = 0.1;
-				dirLight.shadow.camera.far = 1500;
-				dirLight.shadow.camera.left = d * -1;
-				dirLight.shadow.camera.right = d;
-				dirLight.shadow.camera.top = d;
-				dirLight.shadow.camera.bottom = d * -1;
-				// Add directional Light to scene
-				scene.add(dirLight);
 
 				//control keys
 				const keysPressed ={ };
@@ -556,40 +556,19 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				//Allows the character to move:
-				/*document.onkeydown = function(e){
-					if (e.keyCode==37){
-						model.position.x -= 1;
-						camera.position.x -= 1;
-											}
-					if (e.keyCode==39){
-						model.position.x += 1;
-						camera.position.x += 1;
-					}
-					if (e.keyCode==38){
-						model.position.z -= 1;
-						camera.position.z -= 1;
-					}
-					if (e.keyCode==40){
-						model.position.z += 1;
-						camera.position.z += 1;
-					}
-	
-				}*/
-
-				// Add a camera
 				renderer.render(scene,camera);
 				const clock= new THREE.Clock();
-
+	
 				function animate() {
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
+					controls.update();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 				}
-
+				
 				animate();
 			}
 			
