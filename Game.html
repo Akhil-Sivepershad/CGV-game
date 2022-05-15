@@ -8,11 +8,12 @@
 		</style>
 	</head>
 	<body>
-		<script src="Js/three.js"></script>
-		<script src="https://threejs.org/build/three.min.js"></script>
-		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
-		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-		<script>
+		<script type="module">
+			import * as THREE from "../CGV-game/Js/three.module.js";
+			import * as CANNON from "../CGV-game/Js/cannon-es.js";
+			import { OrbitControls } from "../CGV-game/Js/OrbitControls.js";
+			import { GLTFLoader } from "../CGV-game/Js/GLTFLoader.js";
+
 			const canvas = document.querySelector('#c');
 
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
@@ -113,8 +114,10 @@
 				}
 				
 			}
+			
 			// Initialise the scene
 			const scene = new THREE.Scene();
+			const world = new CANNON.World();
 			scene.background = new THREE.Color("black");
 
 			function wall(){
@@ -507,7 +510,7 @@
 				//z=5 y=20
 
 				//add orbit control
-				let controls = new THREE.OrbitControls(camera, renderer.domElement);
+				let controls = new OrbitControls(camera, renderer.domElement);
 				//controls.addEventListener('change', renderer);
 				// controls.enabled = true;
 				// controls.minDistance = 40;
@@ -518,7 +521,7 @@
 				controls.maxDistance = 40
 				controls.enablePan = false
 				controls.maxPolarAngle = Math.PI / 2 - 0.05
-				orbitCameraTarget=new THREE.Vector3(0,15,30);
+				var orbitCameraTarget = new THREE.Vector3(0,15,30);
 				controls.target=orbitCameraTarget
 				controls.update();
 
@@ -554,10 +557,10 @@
 
 				//importing the character
 				let modelControls=new CharacterControls();
-				var loader = new THREE.GLTFLoader();
+				var loader = new GLTFLoader();
 				loader.load("Object_models/witch_cartoonish_character3.glb",
-				function(gltf) {
-				model = gltf.scene;
+				(gltf) => {
+				var model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
 				model.position.x = 0;
 				model.position.y = -0.2;
