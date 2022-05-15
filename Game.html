@@ -36,8 +36,11 @@
 				}
 
 				directionOffset(keysPressed){
-					var directionOffset = Math.PI //arrow up
-					if (keysPressed['arrowdown']) {
+					var directionOffset = 0 //arrow up
+					if (keysPressed['arrowup']) {
+						directionOffset = Math.PI //arrow up						
+					}
+					else if (keysPressed['arrowdown']) {
 						directionOffset = 0 //arrow down						
 					}
 					else if (keysPressed['arrowleft']) {
@@ -67,6 +70,9 @@
 						if(keysPressed[key]==true){
 							//console.log(key)
 							directionPressed=key
+							if((directionPressed=='arrowup'||directionPressed=='arrowdown'||directionPressed=='arrowleft'||directionPressed=='arrowright')==false){
+								return
+							}
 							//console.log(keysPressed)
 						}
 						
