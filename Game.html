@@ -206,8 +206,8 @@
 				maze.add(wall().translateX(75).translateZ(30));
 
 				maze.add(wallShort().translateX(60).translateZ(55).rotateY(Math.PI / 2));
-				maze.add(wallShort().translateX(70).translateZ(35));
-				maze.add(wallShort().translateX(80).translateZ(35));
+				maze.add(wallShort().translateX(70).translateZ(40));
+				maze.add(wallShort().translateX(80).translateZ(40));
 				maze.add(wallShort().translateX(85).translateZ(40).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(50).translateZ(20));
 				maze.add(wallShort().translateX(75).translateZ(15).rotateY(Math.PI / 2));
@@ -531,7 +531,7 @@
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
-				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0063_1_seamless_S.jpg" );
+				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0063_2_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
 				floorTexture.wrapS = THREE.RepeatWrapping;
 				floorTexture.repeat.set(50,50);
