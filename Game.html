@@ -29,8 +29,9 @@
 				fadeDuration =0.2
 				velocity=20
 
-				constructor(model,camera,currentAction,orbitControl){
+				constructor(model,camera,currentAction,orbitControl,modelBody){
 					this.model=model;
+					this.modelBody=modelBody
 					this.camera=camera;
 					this.number=3;
 					this.currentAction=currentAction;
@@ -105,8 +106,8 @@
 						//move model and camera
 						const moveX = this.walkDirection.x * this.velocity * delta
             			const moveZ = this.walkDirection.z * this.velocity * delta
-            			this.model.position.x -= moveX
-            			this.model.position.z -= moveZ
+            			this.modelBody.position.x -= moveX
+            			this.modelBody.position.z -= moveZ
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -116,15 +117,20 @@
 				
 			}
 			
-			// Initialise the scene
+			//Initialise the scene
 			const scene = new THREE.Scene();
-			const world = new CANNON.World();
+			const world = new CANNON.World({
+				//gravity: new CANNON.Vec3(0,-9.81,0)
+			});
 			const cannonDebugger = new CannonDebugger(scene, world,{
 				color: 0xffffff, //wireframe colour
 				scale: 1,
 			});
 			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
+
+			//global variables
+			var modelBody, model;
 
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,30,1);
@@ -148,12 +154,31 @@
 				return walltmp;
 			}
 
+			function physicsMaze(){
+				var axis = new CANNON.Vec3(0,1,0);
+				var rotation = Math.PI/2;
+
+				var wallShape = new CANNON.Box(new CANNON.Vec3(15,15,0.5));
+				var shortWallShape = new CANNON.Box(new CANNON.Vec3(5,15,0.5));
+				var mazeBody = new CANNON.Body({
+					mass: 0,
+					shape: wallShape
+				})
+
+				mazeBody.addShape(wallShape, new CANNON.Vec3(30,0,0), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-30,0,0), new CANNON.Quaternion());
+
+				return mazeBody;
+			}
+
 			function maze(){
 				var maze = new THREE.Object3D();
+
 				maze.add(wall());
 				maze.add(wall().translateX(30));
 				maze.add(wall().translateX(-30));
 
+				//person 1 starts
                 maze.add(wallShort().translateX(-10).translateZ(5).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(45).translateZ(15).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(45).translateZ(30).rotateY(Math.PI / 2));
@@ -223,7 +248,7 @@
 				maze.add(wall().translateX(50).translateZ(125));
 				maze.add(wall().translateX(80).translateZ(125));
 				maze.add(wall().translateX(-5).translateZ(100).rotateY(Math.PI / 2));
-
+				
 				maze.add(wall().translateX(80).translateZ(110));
 				maze.add(wallShort().translateX(65).translateZ(105).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(100).translateZ(110));
@@ -235,7 +260,9 @@
 				maze.add(wallShort().translateX(150).translateZ(130));
 				maze.add(wall().translateX(155).translateZ(130).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(135).translateZ(135).rotateY(Math.PI / 2));
+				//person 1 ends
 
+				//person 2 starts
 				maze.add(wallShort().translateX(50).translateZ(170).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(50).translateZ(160).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(55).translateZ(155));
@@ -287,7 +314,7 @@
 				maze.add(wallShort().translateX(-45).translateZ(115).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(-15).translateZ(115).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(-35).translateZ(145).rotateY(Math.PI / 2));
-
+				
 				maze.add(wall().translateX(-30).translateZ(100));
 				maze.add(wall().translateX(-15).translateZ(45).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(-30).translateZ(40));
@@ -311,7 +338,10 @@
 				maze.add(wallShort().translateX(-25).translateZ(20).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(-30).translateZ(45).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(-75).translateZ(70).rotateY(Math.PI / 2));
-				maze.add(wallShort().translateX(-75).translateZ(80).rotateY(Math.PI / 2));	
+				maze.add(wallShort().translateX(-75).translateZ(80).rotateY(Math.PI / 2));
+				//person 2 ends
+
+				//person 3 starts
 
 				//side floating
 				maze.add(wall().translateX(-70).translateZ(0).rotateY(Math.PI / 2));
@@ -424,7 +454,10 @@
 				maze.add(wallShort().translateX(155).translateZ(-40));
 				maze.add(wallShort().translateX(160).translateZ(-35).rotateY(Math.PI / 2));
 				maze.add(wall().translateX(135).translateZ(-5).rotateY(Math.PI / 2));
-				
+				//person 3 ends
+
+				//person 4 starts
+
 				//upper boundary of the wall
 				maze.add(wall().translateX(-100).translateZ(-100));
 				maze.add(wall().translateX(-70).translateZ(-100));
@@ -551,29 +584,42 @@
 				for (let i = 0; i < 6; i++) {
 					materialArray[i].side = THREE.BackSide;
 				}
-				let skyBovGeo = new THREE.BoxGeometry(500,500,500);
-				let skyBox = new THREE.Mesh(skyBovGeo, materialArray);
+				let skyBoxGeo = new THREE.BoxGeometry(500,500,500);
+				let skyBox = new THREE.Mesh(skyBoxGeo, materialArray);
 				scene.add(skyBox);
 
 
 				//adding the floor
 				scene.add(floor());
-
+				
+				//adding the maze to the scene and physical world
 				scene.add(maze());
+				world.addBody(physicsMaze());
 
 				//importing the character
 				let modelControls=new CharacterControls();
 				var loader = new GLTFLoader();
 				loader.load("Object_models/witch_cartoonish_character3.glb",
 				(gltf) => {
-				var model = gltf.scene;
+				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
-				model.position.x = 0;
-				model.position.y = -0.2;
-				model.position.z = 30;
-				model.rotation.y=Math.PI;
+				
+				var modelShape = new CANNON.Box(new CANNON.Vec3(2,13,2)); //physics shape for model
+				modelBody = new CANNON.Body({
+					mass: 1,
+					shape: modelShape
+				}) //physics body for model
+				modelBody.position.x = 0;
+				modelBody.position.y = -0.2;
+				modelBody.position.z = 30;
+				modelBody.linearDamping = 0.9999; //prevents the body from accelerating infinitely after a collision
+				world.addBody(modelBody);
+				
+				model.position.copy(modelBody.position); //makes the model position the same as the modelBody
+				model.quaternion.copy(modelBody.quaternion); //makes the model position the same as the modelBody
 				scene.add(model);
-				modelControls=new CharacterControls(model,camera,'idle',controls);
+		
+				modelControls=new CharacterControls(model,camera,'idle',controls,modelBody);
 				
 				},
 				undefined,
@@ -605,6 +651,10 @@
 					cannonDebugger.update(); //updates wireframe positions
 					world.step(timeStep);
 
+					if(model){
+						model.position.copy(modelBody.position); //makes the modelBody position the same as the model
+					}//only copies the position if the model has loaded
+					
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
