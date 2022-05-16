@@ -12,7 +12,7 @@
 		<script src="https://threejs.org/build/three.min.js"></script>
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-		
+		<div id="mapCanvas" style="position: absolute; left:100px; top:100px; width:320px; height:240px;"></div>
 		<script>
 			const canvas = document.querySelector('#c');
 			var mapCamera, mapWidth = 240, mapHeight = 160;
@@ -502,7 +502,7 @@
 			
 			function Init(){
 				// Initialise the renderer
-				const renderer = new THREE.WebGLRenderer({ antialias: true });
+			const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: false }, { autoclear: false });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
@@ -515,13 +515,14 @@
 				camera.position.x = 0;
 				camera.position.y = 15;
 				//z=5 y=20
+				
 
 				// initialise the orthographic camera
 				mapCamera = new THREE.OrthographicCamera(
-					window.innerWidth / -150,		// Left
-    				window.innerWidth / 150,		// Right
-    				window.innerHeight / 150,		// Top
-    				window.innerHeight / -150,	// Bottom
+					window.innerWidth / -35,		// Left
+    				window.innerWidth / 35,		// Right
+    				window.innerHeight / 35,		// Top
+    				window.innerHeight / -35,	// Bottom
     									-5000, // Near -5000
     									10000  );// Far 10000
 				mapCamera.down = new THREE.Vector3(0,0,10);
@@ -610,24 +611,27 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				renderer.render(scene,camera);
 				const clock= new THREE.Clock();
 	
-				var h = window.innerHeight;
+				var w = window.innerWidth, h = window.innerHeight;
 				function animate() {
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					controls.update();
+					
+					//perspective camera view being rendered
+					//renderer.setViewport( 0, 0, w, h );
+					//renderer.clear();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 
 					//orthographic camera view being rendered
-					//renderer.setViewport(10, h - mapHeight - 0, mapWidth, mapHeight);
-	 				//renderer.render(scene, mapCamera);
+					//renderer.setViewport(10, h - mapHeight - 10, mapWidth, mapHeight);
+	 				//renderer.render(scene, mapCamera);		
+							
 				}
-
 				animate();
 			}
 			
