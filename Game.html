@@ -16,6 +16,7 @@
 			import { GLTFLoader } from "../CGV-game/Js/GLTFLoader.js";
 
 			const canvas = document.querySelector('#c');
+			var mapCamera, mapWidth = 240, mapHeight = 160;
 
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
 				
@@ -24,6 +25,7 @@
 				rotateAngle= new THREE.Vector3(0,1,0);
 				rotateQuarternion=new THREE.Quaternion();
 				cameraTarget=new THREE.Vector3();
+				mapCameraTarget=new THREE.Vector3();
 
 				//constants
 				fadeDuration =0.2
@@ -39,8 +41,11 @@
 				}
 
 				directionOffset(keysPressed){
-					var directionOffset = Math.PI //arrow up
-					if (keysPressed['arrowdown']) {
+					var directionOffset = 0 //arrow up
+					if (keysPressed['arrowup']) {
+						directionOffset = Math.PI //arrow up						
+					}
+					else if (keysPressed['arrowdown']) {
 						directionOffset = 0 //arrow down						
 					}
 					else if (keysPressed['arrowleft']) {
@@ -59,7 +64,12 @@
 					this.cameraTarget.y = this.model.position.y+15 
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
+				}
 
+				updataMapCameraTarget(moveX, moveZ) {
+					this.mapCamera.position.x -= moveX
+            		this.mapCamera.position.z -= moveZ
+					this.mapCamera.target = this.mapCameraTarget
 				}
 
 				update(delta, keysPressed){//delta is frame number
@@ -70,6 +80,9 @@
 						if(keysPressed[key]==true){
 							//console.log(key)
 							directionPressed=key
+							if((directionPressed=='arrowup'||directionPressed=='arrowdown'||directionPressed=='arrowleft'||directionPressed=='arrowright')==false){
+								return
+							}
 							//console.log(keysPressed)
 						}
 						
@@ -110,6 +123,7 @@
             			this.modelBody.position.z -= moveZ
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
+						//this.updataMapCameraTarget(moveX,moveZ);
 					}
 
 
@@ -210,7 +224,7 @@
 				maze.add(wall().translateX(160).translateZ(15).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(155).translateZ(0));
 				maze.add(wallShort().translateX(150).translateZ(5).rotateY(Math.PI / 2));
-				maze.add(wall().translateX(100).translateZ(45));
+				maze.add(wall().translateX(100).translateZ(50));
 				maze.add(wallShort().translateX(95).translateZ(30));
 				maze.add(wallShort().translateX(100).translateZ(25).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(100).translateZ(35).rotateY(Math.PI / 2));
@@ -274,15 +288,17 @@
 
 				maze.add(wall().translateX(150).translateZ(100));
 				maze.add(wallShort().translateX(170).translateZ(100));
-				maze.add(wall().translateX(130).translateZ(145));
-				maze.add(wallShort().translateX(150).translateZ(145));
-				maze.add(wallShort().translateX(115).translateZ(140).rotateY(Math.PI / 2));
-				maze.add(wall().translateX(100).translateZ(135));
+				maze.add(wall().translateX(130).translateZ(155));
+				maze.add(wallShort().translateX(150).translateZ(155));
+				maze.add(wallShort().translateX(155).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(115).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(100).translateZ(145));
 				maze.add(wallShort().translateX(45).translateZ(130).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(40).translateZ(135));
 				maze.add(wallShort().translateX(35).translateZ(140).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(30).translateZ(145));
 				maze.add(wall().translateX(25).translateZ(140).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(15).translateZ(75).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(10).translateZ(125));
 				maze.add(wallShort().translateX(20).translateZ(125));
 				maze.add(wall().translateX(5).translateZ(130).rotateY(Math.PI / 2));
@@ -515,7 +531,7 @@
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
-				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
+				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0063_1_seamless_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
 				floorTexture.wrapS = THREE.RepeatWrapping;
 				floorTexture.repeat.set(50,50);
@@ -525,16 +541,11 @@
 				return floor; 			
 			}
 
-			function miniMap()
-			{
-				const cameraOrtho = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
-			}
-
 			Init();
 			
 			function Init(){
 				// Initialise the renderer
-				const renderer = new THREE.WebGLRenderer({ antialias: true });
+				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: false }, { autoclear: false });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
@@ -547,6 +558,19 @@
 				camera.position.x = 0;
 				camera.position.y = 15;
 				//z=5 y=20
+				
+
+				// initialise the orthographic camera
+				mapCamera = new THREE.OrthographicCamera(
+					window.innerWidth / -35,		// Left
+    				window.innerWidth / 35,		// Right
+    				window.innerHeight / 35,		// Top
+    				window.innerHeight / -35,	// Bottom
+    									-5000, // Near -5000
+    									10000  );// Far 10000
+				mapCamera.down = new THREE.Vector3(0,0,10);
+				mapCamera.lookAt(new THREE.Vector3(0,-1,0));
+				//scene.add(mapCamera);
 
 				//add orbit control
 				let controls = new OrbitControls(camera, renderer.domElement);
@@ -643,9 +667,9 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				renderer.render(scene,camera);
 				const clock= new THREE.Clock();
 	
+				var w = window.innerWidth, h = window.innerHeight;
 				function animate() {
 					//physics updates:
 					cannonDebugger.update(); //updates wireframe positions
@@ -660,10 +684,18 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					controls.update();
+					
+					//perspective camera view being rendered
+					//renderer.setViewport( 0, 0, w, h );
+					//renderer.clear();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
+
+					//orthographic camera view being rendered
+					//renderer.setViewport(10, h - mapHeight - 10, mapWidth, mapHeight);
+	 				//renderer.render(scene, mapCamera);		
+							
 				}
-				
 				animate();
 			}
 			
