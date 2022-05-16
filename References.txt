@@ -1,5 +1,8 @@
 All textures downloaded from Textures.com:
-Floor texture - TexturesCom_FloorsMedieval0084_2_S.jpg
+Floor texture - TexturesCom_FloorsMedieval0063_1_seamless_S
 Wall texture - TexturesCom_BrickOldDirty0132_1_seamless_S.jpg
+Maze adapted and modified from https://www.iconspng.com/image/97954/simple-maze8
 
 character controls made with help from Genka https://youtu.be/C3s0UHpwlf8
+
+

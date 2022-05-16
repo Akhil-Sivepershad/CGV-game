@@ -173,9 +173,9 @@
 				maze.add(wall().translateX(75).translateZ(30));
 
 				maze.add(wallShort().translateX(60).translateZ(55).rotateY(Math.PI / 2));
-				maze.add(wallShort().translateX(70).translateZ(35));
-				maze.add(wallShort().translateX(80).translateZ(35));
-				maze.add(wallShort().translateX(85).translateZ(40).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(70).translateZ(40));
+				maze.add(wallShort().translateX(80).translateZ(40));
+				maze.add(wallShort().translateX(85).translateZ(45).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(50).translateZ(20));
 				maze.add(wallShort().translateX(75).translateZ(15).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(70).translateZ(10));
@@ -191,7 +191,7 @@
 				maze.add(wall().translateX(160).translateZ(15).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(155).translateZ(0));
 				maze.add(wallShort().translateX(150).translateZ(5).rotateY(Math.PI / 2));
-				maze.add(wall().translateX(100).translateZ(45));
+				maze.add(wall().translateX(100).translateZ(50));
 				maze.add(wallShort().translateX(95).translateZ(30));
 				maze.add(wallShort().translateX(100).translateZ(25).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(100).translateZ(35).rotateY(Math.PI / 2));
@@ -253,15 +253,17 @@
 
 				maze.add(wall().translateX(150).translateZ(100));
 				maze.add(wallShort().translateX(170).translateZ(100));
-				maze.add(wall().translateX(130).translateZ(145));
-				maze.add(wallShort().translateX(150).translateZ(145));
-				maze.add(wallShort().translateX(115).translateZ(140).rotateY(Math.PI / 2));
-				maze.add(wall().translateX(100).translateZ(135));
+				maze.add(wall().translateX(130).translateZ(155));
+				maze.add(wallShort().translateX(150).translateZ(155));
+				maze.add(wallShort().translateX(155).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(115).translateZ(150).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(100).translateZ(145));
 				maze.add(wallShort().translateX(45).translateZ(130).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(40).translateZ(135));
 				maze.add(wallShort().translateX(35).translateZ(140).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(30).translateZ(145));
 				maze.add(wall().translateX(25).translateZ(140).rotateY(Math.PI / 2));
+				maze.add(wall().translateX(15).translateZ(75).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(10).translateZ(125));
 				maze.add(wallShort().translateX(20).translateZ(125));
 				maze.add(wall().translateX(5).translateZ(130).rotateY(Math.PI / 2));
@@ -488,7 +490,7 @@
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
-				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
+				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0063_1_seamless_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
 				floorTexture.wrapS = THREE.RepeatWrapping;
 				floorTexture.repeat.set(50,50);
@@ -511,9 +513,9 @@
 				// initialise the camera
 				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight, 1, 1000);
 				//camera.position.set(-900,-200,-900);
-				camera.position.z = 35;
+				camera.position.z = 55;
 				camera.position.x = 0;
-				camera.position.y = 15;
+				camera.position.y = 45;
 				//z=5 y=20
 				
 
