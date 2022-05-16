@@ -9,11 +9,11 @@
 	</head>
 	<body>
 		<script type="module">
-			import * as THREE from "../CGV-game/Js/three.module.js";
-			import * as CANNON from "../CGV-game/Js/cannon-es.js";
-			import CannonDebugger from "../CGV-game/Js/cannon-es-debugger.js";
-			import { OrbitControls } from "../CGV-game/Js/OrbitControls.js";
-			import { GLTFLoader } from "../CGV-game/Js/GLTFLoader.js";
+			import * as THREE from "../Js/three.module.js";
+			import * as CANNON from "../Js/cannon-es.js";
+			import CannonDebugger from "../Js/cannon-es-debugger.js";
+			import { OrbitControls } from "../Js/OrbitControls.js";
+			import { GLTFLoader } from "../Js/GLTFLoader.js";
 
 			const canvas = document.querySelector('#c');
 			var mapCamera, mapWidth = 240, mapHeight = 160;
@@ -545,11 +545,7 @@
 			
 			function Init(){
 				// Initialise the renderer
-<<<<<<< HEAD
 				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: true }, { autoclear: false });
-=======
-				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: false }, { autoclear: false });
->>>>>>> 01a4f9e61d8f68acaa3f0e55848670c5f884d7db
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
