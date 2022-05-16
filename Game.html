@@ -504,7 +504,7 @@
 			
 			function Init(){
 				// Initialise the renderer
-			const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: false }, { autoclear: false });
+				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: true }, { autoclear: false });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
@@ -622,13 +622,14 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					controls.update();
-					
+
 					//perspective camera view being rendered
 					//renderer.setViewport( 0, 0, w, h );
 					//renderer.clear();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
 
+					
 					//orthographic camera view being rendered
 					//renderer.setViewport(10, h - mapHeight - 10, mapWidth, mapHeight);
 	 				//renderer.render(scene, mapCamera);		
