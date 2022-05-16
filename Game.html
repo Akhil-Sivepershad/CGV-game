@@ -11,6 +11,7 @@
 		<script type="module">
 			import * as THREE from "../CGV-game/Js/three.module.js";
 			import * as CANNON from "../CGV-game/Js/cannon-es.js";
+			import CannonDebugger from "../CGV-game/Js/cannon-es-debugger.js";
 			import { OrbitControls } from "../CGV-game/Js/OrbitControls.js";
 			import { GLTFLoader } from "../CGV-game/Js/GLTFLoader.js";
 
@@ -118,6 +119,11 @@
 			// Initialise the scene
 			const scene = new THREE.Scene();
 			const world = new CANNON.World();
+			const cannonDebugger = new CannonDebugger(scene, world,{
+				color: 0xffffff, //wireframe colour
+				scale: 1,
+			});
+			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
 
 			function wall(){
@@ -595,6 +601,10 @@
 				const clock= new THREE.Clock();
 	
 				function animate() {
+					//physics updates:
+					cannonDebugger.update(); //updates wireframe positions
+					world.step(timeStep);
+
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
