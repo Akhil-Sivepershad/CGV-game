@@ -200,9 +200,9 @@
 				maze.add(wall().translateX(75).translateZ(30));
 
 				maze.add(wallShort().translateX(60).translateZ(55).rotateY(Math.PI / 2));
-				maze.add(wallShort().translateX(70).translateZ(35));
-				maze.add(wallShort().translateX(80).translateZ(35));
-				maze.add(wallShort().translateX(85).translateZ(40).rotateY(Math.PI / 2));
+				maze.add(wallShort().translateX(70).translateZ(40));
+				maze.add(wallShort().translateX(80).translateZ(40));
+				maze.add(wallShort().translateX(85).translateZ(45).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(50).translateZ(20));
 				maze.add(wallShort().translateX(75).translateZ(15).rotateY(Math.PI / 2));
 				maze.add(wallShort().translateX(70).translateZ(10));
@@ -542,7 +542,8 @@
 			
 			function Init(){
 				// Initialise the renderer
-				const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: true }, { autoclear: false });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
@@ -668,8 +669,18 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					controls.update();
+
+					//perspective camera view being rendered
+					//renderer.setViewport( 0, 0, w, h );
+					//renderer.clear();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
+
+					
+					//orthographic camera view being rendered
+					//renderer.setViewport(10, h - mapHeight - 10, mapWidth, mapHeight);
+	 				//renderer.render(scene, mapCamera);		
+							
 				}
 				
 				animate();
