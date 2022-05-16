@@ -12,8 +12,10 @@
 		<script src="https://threejs.org/build/three.min.js"></script>
 		<script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
 		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+		
 		<script>
 			const canvas = document.querySelector('#c');
+			var mapCamera, mapWidth = 240, mapHeight = 160;
 
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
 				
@@ -22,9 +24,10 @@
 				rotateAngle= new THREE.Vector3(0,1,0);
 				rotateQuarternion=new THREE.Quaternion();
 				cameraTarget=new THREE.Vector3();
+				mapCameraTarget=new THREE.Vector3();
 
-				//constants
-				fadeDuration =0.2
+				//constaints
+				fadeDuration = 0.2
 				velocity=20
 
 				constructor(model,camera,currentAction,orbitControl){
@@ -59,7 +62,12 @@
 					this.cameraTarget.y = this.model.position.y+15 
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
+				}
 
+				updataMapCameraTarget(moveX, moveZ) {
+					this.mapCamera.position.x -= moveX
+            		this.mapCamera.position.z -= moveZ
+					this.mapCamera.target = this.mapCameraTarget
 				}
 
 				update(delta, keysPressed){//delta is frame number
@@ -113,6 +121,7 @@
             			this.model.position.z -= moveZ
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
+						//this.updataMapCameraTarget(moveX,moveZ);
 					}
 
 
@@ -491,11 +500,6 @@
 				return floor; 			
 			}
 
-			function miniMap()
-			{
-				const cameraOrtho = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
-			}
-
 			Init();
 			
 			function Init(){
@@ -513,6 +517,18 @@
 				camera.position.x = 0;
 				camera.position.y = 45;
 				//z=5 y=20
+
+				// initialise the orthographic camera
+				mapCamera = new THREE.OrthographicCamera(
+					window.innerWidth / -150,		// Left
+    				window.innerWidth / 150,		// Right
+    				window.innerHeight / 150,		// Top
+    				window.innerHeight / -150,	// Bottom
+    									-5000, // Near -5000
+    									10000  );// Far 10000
+				mapCamera.down = new THREE.Vector3(0,0,10);
+				mapCamera.lookAt(new THREE.Vector3(0,-1,0));
+				//scene.add(mapCamera);
 
 				//add orbit control
 				let controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -599,6 +615,7 @@
 				renderer.render(scene,camera);
 				const clock= new THREE.Clock();
 	
+				var h = window.innerHeight;
 				function animate() {
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
@@ -607,8 +624,12 @@
 					controls.update();
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);
+
+					//orthographic camera view being rendered
+					//renderer.setViewport(10, h - mapHeight - 0, mapWidth, mapHeight);
+	 				//renderer.render(scene, mapCamera);
 				}
-				
+
 				animate();
 			}
 			
