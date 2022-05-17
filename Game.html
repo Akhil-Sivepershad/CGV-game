@@ -288,6 +288,7 @@
 				mazeBody.addShape(shortWallShapeRotated, new CANNON.Vec3(160, 0, -35), new CANNON.Quaternion());
 				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(135, 0, -5), new CANNON.Quaternion());
 				//person 3 ends
+
 				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(45,0,15), new CANNON.Quaternion());
 				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(45,0,30), new CANNON.Quaternion());
 				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(45,0,45), new CANNON.Quaternion());
@@ -986,7 +987,7 @@
 	
 				function animate() {
 					//physics updates:
-					cannonDebugger.update(); //updates wireframe positions
+					//cannonDebugger.update(); //updates wireframe positions
 					world.step(timeStep);
 
 					if(model){
