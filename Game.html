@@ -39,7 +39,7 @@
 					this.currentAction=currentAction;
 					this.orbitControl = orbitControl;
 				}
-
+				//used to update the direction of the camera
 				directionOffset(keysPressed){
 					var directionOffset = 0 //arrow up
 					if (keysPressed['arrowup']) {
@@ -56,6 +56,7 @@
 					}
 					return directionOffset		
 				}
+				//updates the camera position, and orbit controls
 				updateCameraTarget(moveX, moveZ) {
 					this.camera.position.x -= moveX
             		this.camera.position.z -= moveZ
@@ -66,7 +67,15 @@
 					this.orbitControl.target = this.cameraTarget
 
 				}
-
+				checkFinished(positionX,positionZ){
+					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
+						//175,175
+						window.alert("Congratulations, Challenger\nYou have won the game!");
+						document.location.reload()
+					}
+					
+				}
+				//event that updates model and camera
 				update(delta, keysPressed){//delta is frame number
 					var directionPressed=null;
 					var state='';
@@ -75,6 +84,9 @@
 						if(keysPressed[key]==true){
 							//console.log(key)
 							directionPressed=key
+							if(directionPressed=='r'){
+								document.location.reload()
+							}
 							if((directionPressed=='arrowup'||directionPressed=='arrowdown'||directionPressed=='arrowleft'||directionPressed=='arrowright')==false){
 								return
 							}
@@ -116,6 +128,7 @@
             			const moveZ = this.walkDirection.z * this.velocity * delta
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
+						this.checkFinished(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -1011,7 +1024,8 @@
 					requestAnimationFrame(animate);
 					renderer.render(scene,camera);	
 				}
-				
+				renderer.render(scene,camera);
+				window.alert("Welcome Challenger, you task is to escape the maze.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
 				animate();
 			}
 			
