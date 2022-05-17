@@ -2,4 +2,7 @@ All textures downloaded from Textures.com:
 Floor texture - TexturesCom_FloorsMedieval0084_2_S.jpg
 Wall texture - TexturesCom_BrickOldDirty0132_1_seamless_S.jpg
 
+Textures downloaded from https://opengameart.org/:
+Skybox texture - https://opengameart.org/content/night-sky-stars-and-galaxies
+
 character controls made with help from Genka https://youtu.be/C3s0UHpwlf8
