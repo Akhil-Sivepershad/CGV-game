@@ -131,7 +131,7 @@
 			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
 
-			//global variables
+			//global variables for model and the physics body of the model
 			var modelBody, model;
 
 			function wall(){
@@ -157,15 +157,12 @@
 			}
 
 			function physicsMaze(){
-				var axis = new CANNON.Vec3(0,0,1);
-				var rotation = Math.PI/2;
-
 				var wallShape = new CANNON.Box(new CANNON.Vec3(15,15,0.5));
 				var wallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,15,15));
 
 				var shortWallShape = new CANNON.Box(new CANNON.Vec3(5,15,0.5));
 				var shortWallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,15,5));
-				//var thequat=new CANNON.Quaternion.setFromAxisAngle(axis,rotation)
+				
 				var mazeBody = new CANNON.Body({
 					mass: 0,
 					shape: wallShape
@@ -255,6 +252,60 @@
                 mazeBody.addShape(shortWallShape, new CANNON.Vec3(150,0,130), new CANNON.Quaternion());
                 mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(155,0,130), new CANNON.Quaternion());
                 mazeBody.addShape(shortWallShapeRotated, new CANNON.Vec3(135,0,135), new CANNON.Quaternion());
+
+				//person 4
+
+				//upper boundary of the wall
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-100,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-70,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-40,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-10,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(20,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(50,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(80,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(110,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(140,0,-100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(160,0,-100), new CANNON.Quaternion());
+
+				//left boundary of the wall
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,-85), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,-80), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,-50), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,-20), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,10), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,30), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,50), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,70), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,90), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,110), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,130), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,150), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(-115,0,160), new CANNON.Quaternion());
+
+				//bottom boundary of the maze
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-100,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-75,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-45,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(-15,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(15,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(30,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(60,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(90,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(120,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(150,0,175), new CANNON.Quaternion());
+				mazeBody.addShape(wallShape, new CANNON.Vec3(160,0,175), new CANNON.Quaternion());
+
+				//right boundary of the wall
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,150), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,130), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,100), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,70), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,40), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,10), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,-20), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,-50), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,-80), new CANNON.Quaternion());
+				mazeBody.addShape(wallShapeRotated, new CANNON.Vec3(175,0,-85), new CANNON.Quaternion());
 
 				return mazeBody;
 			}
@@ -613,6 +664,30 @@
 				return floor; 			
 			}
 
+			function skybox(){
+				let materialArray = [];
+				let texture_ft = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_ft.png");
+				let texture_bk = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_bk.png");
+				let texture_up = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_up.png");
+				let texture_dn = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_dn.png");
+				let texture_rt = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_rt.png");
+				let texture_lf = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_lf.png");
+				
+				materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt}));
+				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf}));
+
+				for (let i = 0; i < 6; i++) {
+					materialArray[i].side = THREE.BackSide;
+				}
+				let skyBoxGeo = new THREE.BoxGeometry(500,500,500);
+				let skyBox = new THREE.Mesh(skyBoxGeo, materialArray);
+				return skyBox;
+			}
+
 			function miniMap()
 			{
 				const cameraOrtho = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
@@ -622,7 +697,6 @@
 			
 			function Init(){
 				// Initialise the renderer
-
 				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: true }, { autoclear: false });
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
@@ -655,27 +729,7 @@
 
 
 				//add skybox
-				let materialArray = [];
-				let texture_ft = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_ft.png");
-				let texture_bk = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_bk.png");
-				let texture_up = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_up.png");
-				let texture_dn = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_dn.png");
-				let texture_rt = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_rt.png");
-				let texture_lf = new THREE.TextureLoader().load("Textures/nightsky/nightskycolor_lf.png");
-				
-				materialArray.push(new THREE.MeshBasicMaterial({map: texture_ft}));
-				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk}));
-				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up}));
-				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn}));
-				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt}));
-				materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf}));
-
-				for (let i = 0; i < 6; i++) {
-					materialArray[i].side = THREE.BackSide;
-				}
-				let skyBoxGeo = new THREE.BoxGeometry(500,500,500);
-				let skyBox = new THREE.Mesh(skyBoxGeo, materialArray);
-				scene.add(skyBox);
+				scene.add(skybox());
 
 
 				//adding the floor
@@ -732,7 +786,7 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				renderer.render(scene,camera);
+				
 				const clock= new THREE.Clock();
 	
 				function animate() {
@@ -741,9 +795,10 @@
 					world.step(timeStep);
 
 					if(model){
-						model.position.copy(modelBody.position); //makes the modelBody position the same as the model
+						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
 					}//only copies the position if the model has loaded
 					
+					//updates the player movement
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
