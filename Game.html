@@ -39,13 +39,10 @@
 					this.currentAction=currentAction;
 					this.orbitControl = orbitControl;
 				}
-				//used to update the direction of the camera
+
 				directionOffset(keysPressed){
-					var directionOffset = 0 //arrow up
-					if (keysPressed['arrowup']) {
-						directionOffset = Math.PI //arrow up						
-					}
-					else if (keysPressed['arrowdown']) {
+					var directionOffset = Math.PI //arrow up
+					if (keysPressed['arrowdown']) {
 						directionOffset = 0 //arrow down						
 					}
 					else if (keysPressed['arrowleft']) {
@@ -56,7 +53,6 @@
 					}
 					return directionOffset		
 				}
-				//updates the camera position, and orbit controls
 				updateCameraTarget(moveX, moveZ) {
 					this.camera.position.x -= moveX
             		this.camera.position.z -= moveZ
@@ -67,15 +63,7 @@
 					this.orbitControl.target = this.cameraTarget
 
 				}
-				checkFinished(positionX,positionZ){
-					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
-						//175,175
-						window.alert("Congratulations, Challenger\nYou have won the game!");
-						document.location.reload()
-					}
-					
-				}
-				//event that updates model and camera
+
 				update(delta, keysPressed){//delta is frame number
 					var directionPressed=null;
 					var state='';
@@ -84,12 +72,6 @@
 						if(keysPressed[key]==true){
 							//console.log(key)
 							directionPressed=key
-							if(directionPressed=='r'){
-								document.location.reload()
-							}
-							if((directionPressed=='arrowup'||directionPressed=='arrowdown'||directionPressed=='arrowleft'||directionPressed=='arrowright')==false){
-								return
-							}
 							//console.log(keysPressed)
 						}
 						
@@ -128,7 +110,6 @@
             			const moveZ = this.walkDirection.z * this.velocity * delta
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
-						this.checkFinished(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -869,7 +850,7 @@
 
 			function floor(){
 				var floorGeometry = new THREE.PlaneGeometry(500, 500, 1, 1);
-				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0063_2_S.jpg" );
+				var floorTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_FloorsMedieval0084_2_S.jpg" );
 				floorTexture.wrapT = THREE.RepeatWrapping;
 				floorTexture.wrapS = THREE.RepeatWrapping;
 				floorTexture.repeat.set(50,50);
@@ -1003,7 +984,7 @@
 
 				
 				const clock= new THREE.Clock();
-
+	
 				function animate() {
 					//physics updates:
 					//cannonDebugger.update(); //updates wireframe positions
@@ -1021,11 +1002,18 @@
 					controls.update();
 
 					//perspective camera view being rendered
+					//renderer.setViewport( 0, 0, w, h );
+					//renderer.clear();
 					requestAnimationFrame(animate);
-					renderer.render(scene,camera);	
+					renderer.render(scene,camera);
+
+					
+					//orthographic camera view being rendered
+					//renderer.setViewport(10, h - mapHeight - 10, mapWidth, mapHeight);
+	 				//renderer.render(scene, mapCamera);		
+							
 				}
-				renderer.render(scene,camera);
-				window.alert("Welcome Challenger, you task is to escape the maze.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
+				
 				animate();
 			}
 			
