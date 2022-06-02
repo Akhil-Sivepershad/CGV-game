@@ -73,13 +73,19 @@
 					this.cameraTop.position.z = this.model.position.z
 					this.cameraTop.lookAt(this.model.position);
 				}
+				checkLevel1(positionX,positionZ){
+					if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30){
+						//175,175
+						window.alert("You've made it to the centre");
+					}	
+				}
+
 				checkFinished(positionX,positionZ){
 					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
 						//175,175
 						window.alert("Congratulations, Challenger\nYou have won the game!");
 						document.location.reload()
-					}
-					
+					}	
 				}
 				//event that updates model and camera
 				update(delta, keysPressed){//delta is frame number
@@ -135,6 +141,7 @@
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
 						this.checkFinished(this.modelBody.position.x,this.modelBody.position.z);
+						this.checkLevel1(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
