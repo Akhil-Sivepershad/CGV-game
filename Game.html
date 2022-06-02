@@ -1060,30 +1060,26 @@
 				}
 				);
 
-				//Add hemisphere lights-------------------------------------------------------------------
-				let hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.3);
-				//Loading puddle model into the centre of the maze:
+				//Loading puddle model into the centre of the maze----------------------------------------
 				loader.load("Object_models/low_poly_-_puddle/scene.gltf",
-				(gltf) => {
-				puddle = gltf.scene;
-				gltf.scene.scale.set(0.03,0.03,0.03); 
-		
-				gltf.scene.position.x = -90;
-				gltf.scene.position.z = -65;
-				gltf.scene.position.y = 2;
-				scene.add(puddle);
-				
-				},
-				undefined,
-				function(error) {
-				console.error(error);
-				}
+					(gltf) => {
+						puddle = gltf.scene;
+						gltf.scene.scale.set(0.03, 0.03, 0.03);
+
+						gltf.scene.position.x = -90;
+						gltf.scene.position.z = -65;
+						gltf.scene.position.y = 2;
+						scene.add(puddle);
+
+					},
+					undefined,
+					function (error) {
+						console.error(error);
+					}
 				);
 
-				//----------------------------------------------------------------------------------------
-
-				// Add lights
-				hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.9);
+				//Add lights-------------------------------------------------------------------------------
+				const hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.3);
 				hemiLight.position.set(0, 50, 0);
 				// Add hemisphere light to scene
 				scene.add(hemiLight);
