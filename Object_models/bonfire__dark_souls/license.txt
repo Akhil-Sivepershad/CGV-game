@@ -1,0 +1,11 @@
+Model Information:
+* title:	Bonfire / Dark Souls
+* source:	https://sketchfab.com/3d-models/bonfire-dark-souls-a090bdd8ca6841d1855f3d998697706b
+* author:	Livio Arango (https://sketchfab.com/livioag)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Bonfire / Dark Souls" (https://sketchfab.com/3d-models/bonfire-dark-souls-a090bdd8ca6841d1855f3d998697706b) by Livio Arango (https://sketchfab.com/livioag) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
