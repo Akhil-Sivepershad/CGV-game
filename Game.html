@@ -150,10 +150,16 @@
 			scene.background = new THREE.Color("black");
 
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, level;
+			var modelBody, model, skyBox, level, exit;
 			level = 1;
 
 			function checkLevel(positionX,positionZ){
+				if(level==3){
+					//block the exit
+					//scene.add(wallShort().translateX(175).translateZ(160).rotateY(Math.PI / 2))
+					scene.remove(exit)
+				}
+
 				if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30&&level == 1){ //checks if first level has been completed
 					//175,175
 					window.alert("You've made it to the centre. Congrats");
@@ -550,6 +556,9 @@
 
 			function maze(){
 				var maze = new THREE.Object3D();
+				//exit of maze
+				exit=wallShort().translateX(175).translateZ(170).rotateY(Math.PI / 2)
+				scene.add(exit)
 
 				maze.add(wall());
 				maze.add(wall().translateX(30));
