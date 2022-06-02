@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low Poly - Puddle
+* source:	https://sketchfab.com/3d-models/low-poly-puddle-1b6132426e154eec994e3b59c65a2a07
+* author:	Wyboo (https://sketchfab.com/wyboo)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low Poly - Puddle" (https://sketchfab.com/3d-models/low-poly-puddle-1b6132426e154eec994e3b59c65a2a07) by Wyboo (https://sketchfab.com/wyboo) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
