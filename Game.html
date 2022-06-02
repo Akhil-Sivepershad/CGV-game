@@ -28,7 +28,6 @@
 				rotateQuarternion=new THREE.Quaternion();
 				cameraTarget=new THREE.Vector3();
 				
-
 				//constants
 				fadeDuration =0.2
 				velocity=20
@@ -158,7 +157,7 @@
 			scene.background = new THREE.Color("black");
 
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire;
+			var modelBody, model, skyBox
 
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,30,1);
@@ -168,6 +167,9 @@
 				wallTexture.repeat.set(3,3);
 				var wallMat = new THREE.MeshPhongMaterial({ map : wallTexture });
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
+				walltmp.castShadow = true; //to enable shadows - default is false 
+				walltmp.receiveShadow = true; //to enable shadows - default
+
 				return walltmp;
 			}
 
@@ -182,6 +184,8 @@
 				wallMat.bumpMap = wallBump;
 				wallMat.bumpScale = 0.5;
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
+				walltmp.castShadow = true; //to enable shadows - default is false 
+				walltmp.receiveShadow = true; //to enable shadows - default
 				return walltmp;
 			}
 
@@ -886,6 +890,8 @@
 				var floorMat = new THREE.MeshLambertMaterial({ map : floorTexture});
 				var floor = new THREE.Mesh(floorGeometry, floorMat);
 				floor.rotation.x = -0.5 * Math.PI;
+				floor.receiveShadow = true; //enables floor to receive a shadow
+
 				return floor; 			
 			}
 
@@ -918,12 +924,14 @@
 			function Init(){
 				// Initialise the renderer
 				const renderer = new THREE.WebGLRenderer({ antialias: true }, { alpha: true }, { autoclear: false });
+				renderer.shadowMap.enabled = true; //to render point light shadows
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap; //to render point light shadows
 				renderer.setSize(window.innerWidth,window.innerHeight);
 				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
 				document.body.appendChild(renderer.domElement);
 
-				// initialise the camera
+				// initialise the camera------------------------------------------------------------------
 				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight, 1, 1000);
 				//camera.position.set(-900,-200,-900);
 				camera.position.z = 35;
@@ -931,7 +939,7 @@
 				camera.position.y = 15;
 				//z=5 y=20
 
-				//Initialising top camera
+				//Initialising top camera-----------------------------------------------------------------
 				let cameraTop = new THREE.PerspectiveCamera(90,window.innerWidth / window.innerHeight, 0.01, 500);
 				cameraTop.position.x = 0;
 				cameraTop.position.y = 30;
@@ -940,9 +948,7 @@
 				cameraTop.lookAt(0,0,30);
 				cameraTop.name = "OverheadCam";
 
-				scene.add(camera);
-
-				//add orbit control
+				//add orbit control-----------------------------------------------------------------------
 				let controls = new OrbitControls(camera, renderer.domElement);
 				//controls.addEventListener('change', renderer);
 				// controls.enabled = true;
@@ -957,7 +963,10 @@
 				var orbitCameraTarget = new THREE.Vector3(0,15,30);
 				controls.target=orbitCameraTarget
 				controls.update();
-
+				//----------------------------------------------------------------------------------------
+				//add camera
+				scene.add(camera);
+				
 				//add skybox
 				skyBox = skybox();
 				scene.add(skyBox);
@@ -969,7 +978,7 @@
 				scene.add(maze());
 				world.addBody(physicsMaze());
 
-				//importing the character
+				//importing the character---------------------------------------------------------------------
 				let modelControls=new CharacterControls();
 				var loader = new GLTFLoader();
 				loader.load("Object_models/witch_cartoonish_character3.glb",
@@ -1001,7 +1010,7 @@
 				}
 				);
 				
-				//Loading fire model into the centre of the maze:
+				//Loading fire model into the centre of the maze------------------------------------------
 				loader.load("Object_models/bonfire__dark_souls/scene.gltf",
 				(gltf) => {
 				fire = gltf.scene;
@@ -1009,6 +1018,8 @@
 				gltf.scene.position.z = 30;
 				gltf.scene.position.x = 20;
 				//fire.setPosition(0,0,30);
+				fire.castShadow = true; //to enable shadows - default is false 
+				fire.receiveShadow = true; //to enable shadows - default
 				scene.add(fire);
 				
 				},
@@ -1018,27 +1029,37 @@
 				}
 				);
 
-				//----------------------------------------------------------------------------------------
-
-				// Add lights
-				let hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.9);
+				//Add hemisphere lights-------------------------------------------------------------------
+				let hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.3);
 				hemiLight.position.set(0, 50, 0);
 				// Add hemisphere light to scene
 				scene.add(hemiLight);
 
-				//Create a PointLight and turn on shadows for the light
-				const pointLight = new THREE.PointLight(0xff0000, 1, 70);
-				pointLight.position.set(20, 0, 30);
-				//pointLight.castShadow = true;
-				scene.add(pointLight);
+				//Create a PointLight and turn on shadows for the light-----------------------------------
+				const light = new THREE.PointLight(0xff0000, 1.5, 70);
+				light.position.set(20, 0, 30);
+				light.castShadow = true; // default false
+				scene.add(light);
 
-				const sphereSize = 0.1;
-				const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
-				scene.add(pointLightHelper)
+				//Set up shadow properties for the light
+				light.shadow.mapSize.width = 512; // default
+				light.shadow.mapSize.height = 512; // default
+				light.shadow.camera.near = 0.5; // default
+				light.shadow.camera.far = 500; // default
 
-				//-----------------------------------------------------------------------------------------
+				//Create a DirectionalLight and turn on shadows for the light-----------------------------
+				const Dlight = new THREE.DirectionalLight(0x696969, 0.5, 500);
+				Dlight.position.set(-170, 20, 50); //default; light shining from top
+				Dlight.castShadow = true; // default false
+				scene.add(Dlight);
 
-				//control keys
+				//Set up shadow properties for the light
+				Dlight.shadow.mapSize.width = 512; // default
+				Dlight.shadow.mapSize.height = 512; // default
+				Dlight.shadow.camera.near = 0.5; // default
+				Dlight.shadow.camera.far = 500; // default
+
+				//control keys------------------------------------------------------------------------------
 				const keysPressed ={ };
 				document.addEventListener('keydown', (event)=>{
 					(keysPressed)[event.key.toLowerCase()]=true
@@ -1054,16 +1075,11 @@
 				const listener = new THREE.AudioListener();
 				camera.add(listener);
 
-				//audio loader (loads all mp3 files)
-				const audioLoader = new THREE.AudioLoader();
+				const audioLoader = new THREE.AudioLoader(); //audio loader (loads all mp3 files)
+				
+				const bgSound = new THREE.Audio(listener); //for the background sound - creates a nonpositional global audio object
 
-				//for the background sound
-				//creates a nonpositional global audio object
-				const bgSound = new THREE.Audio(listener);
-				//scene.add(bgSound);
-
-				//load the sound files
-				audioLoader.load("Sounds/Harry Potter Theme Song.mp3", function (buffer) {
+				audioLoader.load("Sounds/Harry Potter Theme Song.mp3", function (buffer) { //load the sound files
 				bgSound.setBuffer(buffer);
 				bgSound.setLoop(true);  //sound will repeat 
 				bgSound.setVolume(0.5); //volume is 0-1
@@ -1102,10 +1118,6 @@
 					renderer.render(scene,cameraTop);
 
 					renderer.setScissorTest(false);
-
-					//to render point light shadows
-					renderer.shadowMap.enabled = true;
-					renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 					requestAnimationFrame(animate);
 						
