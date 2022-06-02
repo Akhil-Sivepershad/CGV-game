@@ -14,9 +14,11 @@
 			import CannonDebugger from "../Js/cannon-es-debugger.js";
 			import { OrbitControls } from "../Js/OrbitControls.js";
 			import { GLTFLoader } from "../Js/GLTFLoader.js";
+			
+			let insetWidth = window.innerWidth/4, insetHeight = window.innerHeight/4;
 
 			const canvas = document.querySelector('#c');
-			var mapCamera, mapWidth = 240, mapHeight = 160;
+			
 
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
 				
@@ -25,16 +27,17 @@
 				rotateAngle= new THREE.Vector3(0,1,0);
 				rotateQuarternion=new THREE.Quaternion();
 				cameraTarget=new THREE.Vector3();
-				mapCameraTarget=new THREE.Vector3();
+				
 
 				//constants
 				fadeDuration =0.2
 				velocity=20
 
-				constructor(model,camera,currentAction,orbitControl,modelBody){
+				constructor(model,camera,cameraTop,currentAction,orbitControl,modelBody){
 					this.model=model;
 					this.modelBody=modelBody
 					this.camera=camera;
+					this.cameraTop=cameraTop;
 					this.number=3;
 					this.currentAction=currentAction;
 					this.orbitControl = orbitControl;
@@ -66,6 +69,8 @@
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
 
+					this.cameraTop.position.x -= moveX
+					this.cameraTop.position.z -= moveZ
 				}
 				checkFinished(positionX,positionZ){
 					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
@@ -903,11 +908,6 @@
 				return skyBox;
 			}
 
-			function miniMap()
-			{
-				const cameraOrtho = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
-			}
-
 			Init();
 			
 			function Init(){
@@ -925,6 +925,17 @@
 				camera.position.x = 0;
 				camera.position.y = 15;
 				//z=5 y=20
+
+				//Initialising top camera
+				let cameraTop = new THREE.PerspectiveCamera(90,window.innerWidth / window.innerHeight, 0.01, 500);
+				cameraTop.position.x = 0;
+				cameraTop.position.y = 30;
+				cameraTop.position.z = 30;
+
+				cameraTop.lookAt(0,0,30);
+				cameraTop.name = "OverheadCam";
+
+				scene.add(camera);
 
 				//add orbit control
 				let controls = new OrbitControls(camera, renderer.domElement);
@@ -977,7 +988,7 @@
 				model.quaternion.copy(modelBody.quaternion); //makes the model position the same as the modelBody
 				scene.add(model);
 		
-				modelControls=new CharacterControls(model,camera,'idle',controls,modelBody);
+				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);
 				
 				},
 				undefined,
@@ -1019,10 +1030,21 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					controls.update();
-
 					//perspective camera view being rendered
+					renderer.setViewport(0,0,window.innerWidth,window.innerHeight);
+					renderer.render(scene,camera);
+
+					renderer.clearDepth();
+					renderer.setScissorTest(true);
+					
+					renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
+					renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
+					renderer.render(scene,cameraTop);
+
+					renderer.setScissorTest(false);
+
 					requestAnimationFrame(animate);
-					renderer.render(scene,camera);	
+						
 				}
 				renderer.render(scene,camera);
 				window.alert("Welcome Challenger, you task is to escape the maze.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
