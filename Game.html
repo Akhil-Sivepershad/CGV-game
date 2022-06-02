@@ -21,21 +21,24 @@
 				{
 					left: 0,
 					bottom: 0,
-					width: 0.5,
+					width: 1.0,
 					height: 1.0,
 					background: new THREE.Color( 0.5, 0.5, 0.7 ),
-					eye: [ 0, 20, 100 ],
+					eye: [ 0, 35, 15 ],
 					up: [ 0, 1, 0 ],
 					fov: 60,
-					updateCamera: function ( camera, scene, mouseX ) {
-
-					  camera.position.x += mouseX * 0.05;
-					  camera.position.x = Math.max( Math.min( camera.position.x, 500 ), - 500 );
-					  camera.lookAt( scene.position );
-
+					updateCamera: function ( camera, scene, moveX, moveZ, cameraTarget,targetX,targetY,targetZ) {
+					
+					  //camera.position.x += mouseX * 0.05;
+					  //camera.position.x = Math.max( Math.min( camera.position.x, 500 ), - 500 );
+					  //camera.lookAt( scene.position );
+					  camera.position.x -= moveX
+					  camera.position.z -= moveZ
+					  camera.lookAt( scene.position);
+					// update camera target
+					//camera.lookAt( cameraTarget );
 					}
-				}
-				/*,
+				}/*,
 				{
 					left: 0.5,
 					bottom: 0.5,
@@ -104,7 +107,7 @@
 					this.cameraTarget.y = this.model.position.y+15 
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
-
+					view.updateCamera(this.camera, this.scene, moveX,moveZ, this.cameraTarget.x, this.cameraTarget.y, this.cameraTarget.z)
 				}
 				checkFinished(positionX,positionZ){
 					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
@@ -1073,9 +1076,9 @@
 					updateSize();
 					for ( let ii = 0; ii < views.length; ++ ii ) {
 						const view = views[ ii ];
-						const camera = view.camera;
+						//const camera = view.camera;
 
-						view.updateCamera( camera, scene, mouseX, mouseY );
+						view.updateCamera( camera, scene, mouseX, mouseY);
 
 						const left = Math.floor( windowWidth * view.left );
 						const bottom = Math.floor( windowHeight * view.bottom );
@@ -1091,14 +1094,14 @@
 						camera.updateProjectionMatrix();
 
 						renderer.render( scene, camera );
-
 						}
+						requestAnimationFrame(animate);
 				}
 				//renderer.render(scene,camera);
 				window.alert("Welcome Challenger, you task is to escape the maze.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
 				animate();
 
-				document.addEventListener( 'mousemove', onDocumentMouseMove );
+				//document.addEventListener( 'mousemove', onDocumentMouseMove );
 
 				function updateSize() {
 					if ( windowWidth != window.innerWidth || windowHeight != window.innerHeight ) {
