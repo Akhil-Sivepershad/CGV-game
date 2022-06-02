@@ -81,6 +81,13 @@
 					}
 					
 				}
+				checkDeath(positionX,positionZ){
+					if(11<positionX&&positionX<29&&21<positionZ&&positionZ<39){
+						//175,175
+						window.alert("You have died!\nFires are quite dangerous...");
+						document.location.reload()
+					}					
+				}
 				//event that updates model and camera
 				update(delta, keysPressed){//delta is frame number
 					var directionPressed=null;
@@ -106,7 +113,7 @@
 					else{
 						state='idle'
 					}
-					if(this.currentAction!=state){
+					if(this.currentAction!=state){ 
 						//changed from walk to idle or vise versa, this is where youd put the code for animations
 						this.currentAction=state;
 					}
@@ -135,6 +142,7 @@
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
 						this.checkFinished(this.modelBody.position.x,this.modelBody.position.z);
+						this.checkDeath(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -1006,8 +1014,8 @@
 				(gltf) => {
 				fire = gltf.scene;
 				gltf.scene.scale.set(5,5,5);
-				gltf.scene.position.z = 30;
 				gltf.scene.position.x = 20;
+				gltf.scene.position.z = 30;
 				//fire.setPosition(0,0,30);
 				scene.add(fire);
 				
