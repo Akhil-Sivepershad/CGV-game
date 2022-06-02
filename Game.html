@@ -965,11 +965,11 @@
 
 				//Initialising top camera
 				let cameraTop = new THREE.PerspectiveCamera(90,window.innerWidth / window.innerHeight, 0.01, 500);
-				cameraTop.position.x = 0;
+				cameraTop.position.x = 130;
 				cameraTop.position.y = 30;
-				cameraTop.position.z = 30;
+				cameraTop.position.z = -95;
 
-				cameraTop.lookAt(0,0,30);
+				cameraTop.lookAt(130,0,-95);
 				cameraTop.name = "OverheadCam";
 
 				scene.add(camera);
