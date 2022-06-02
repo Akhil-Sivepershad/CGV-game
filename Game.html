@@ -73,20 +73,7 @@
 					this.cameraTop.position.z = this.model.position.z
 					this.cameraTop.lookAt(this.model.position);
 				}
-				checkLevel1(positionX,positionZ){
-					if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30){
-						//175,175
-						window.alert("You've made it to the centre");
-					}	
-				}
 
-				checkFinished(positionX,positionZ){
-					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
-						//175,175
-						window.alert("Congratulations, Challenger\nYou have won the game!");
-						document.location.reload()
-					}	
-				}
 				//event that updates model and camera
 				update(delta, keysPressed){//delta is frame number
 					var directionPressed=null;
@@ -140,8 +127,6 @@
             			const moveZ = this.walkDirection.z * this.velocity * delta
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
-						this.checkFinished(this.modelBody.position.x,this.modelBody.position.z);
-						this.checkLevel1(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -165,7 +150,28 @@
 			scene.background = new THREE.Color("black");
 
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox;
+			var modelBody, model, skyBox, level;
+			level = 1;
+
+			function checkLevel(positionX,positionZ){
+				if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30&&level == 1){ //checks if first level has been completed
+					//175,175
+					window.alert("You've made it to the centre. Congrats");
+					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
+					level++;
+				}
+				else if(-70>positionX&&positionX>-80&&-60>positionZ&&positionZ>-70&& level == 2){ //checks if second level has been completed
+					//175,175
+					window.alert("Congratulations, Challenger\nYou have won the game!");
+					level++;
+				}	
+				else if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175&& level == 3){ //checks if final level has been completed
+					//175,175
+					window.alert("Congratulations, Challenger\nYou have won the game!");
+					document.location.reload();
+				}	
+			}
+
 
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,30,1);
@@ -933,9 +939,9 @@
 				// initialise the camera
 				var camera = new THREE.PerspectiveCamera(60,window.innerWidth / window.innerHeight, 1, 1000);
 				//camera.position.set(-900,-200,-900);
-				camera.position.z = 35;
-				camera.position.x = 0;
-				camera.position.y = 15;
+				camera.position.x = 115;
+				camera.position.y = 20;
+				camera.position.z = -92;
 				//z=5 y=20
 
 				//Initialising top camera
@@ -961,7 +967,7 @@
 				controls.maxDistance = 40
 				controls.enablePan = false
 				controls.maxPolarAngle = Math.PI / 2 - 0.05
-				var orbitCameraTarget = new THREE.Vector3(0,15,30);
+				var orbitCameraTarget = new THREE.Vector3(130,15,-100);
 				controls.target=orbitCameraTarget
 				controls.update();
 
@@ -984,14 +990,18 @@
 				model = gltf.scene;
 				gltf.scene.scale.set(10,10,10);
 				
-				var modelShape = new CANNON.Box(new CANNON.Vec3(2,13,2)); //physics shape for model
+				var modelShape = new CANNON.Box(new CANNON.Vec3(2,2,2)); //physics shape for model
 				modelBody = new CANNON.Body({
 					mass: 1,
 					shape: modelShape
 				}) //physics body for model
-				modelBody.position.x = 0;
+				modelBody.position.x = 130;
 				modelBody.position.y = -0.2;
-				modelBody.position.z = 30;
+				modelBody.position.z = -95;
+				//modelBody.position.x = -75;
+				//modelBody.position.y = -0.2;
+				//modelBody.position.z = -60;
+
 				modelBody.linearDamping = 0.9999; //prevents the body from accelerating infinitely after a collision
 				world.addBody(modelBody);
 				
@@ -1058,6 +1068,7 @@
 
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
+						checkLevel(model.position.x,model.position.z);
 					}//only copies the position if the model has loaded
 					
 					//updates the player movement
@@ -1079,11 +1090,13 @@
 
 					renderer.setScissorTest(false);
 
+					//checks to see if levels have been completed:
+
 					requestAnimationFrame(animate);
 						
 				}
 				renderer.render(scene,camera);
-				window.alert("Welcome Challenger, you task is to escape the maze.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
+				window.alert("Welcome Challenger, you seem to have awoken in an unfamiliar area.\nMake your way to the center of the maze to get your bearings.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
 				animate();
 			}
 			
