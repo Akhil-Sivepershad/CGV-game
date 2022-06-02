@@ -159,7 +159,7 @@
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				wallTexture.wrapS = THREE.RepeatWrapping;
 				wallTexture.repeat.set(3,3);
-				var wallMat = new THREE.MeshLambertMaterial({ map : wallTexture });
+				var wallMat = new THREE.MeshPhongMaterial({ map : wallTexture });
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
 				return walltmp;
 			}
@@ -170,7 +170,10 @@
 				wallTexture.wrapT = THREE.RepeatWrapping;
 				wallTexture.wrapS = THREE.RepeatWrapping;
 				wallTexture.repeat.set(3,3);
-				var wallMat = new THREE.MeshLambertMaterial({ map: wallTexture });
+				var wallMat = new THREE.MeshPhongMaterial({ map: wallTexture });
+				var wallBump = new THREE.TextureLoader().load( "NormalMap-Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
+				wallMat.bumpMap = wallBump;
+				wallMat.bumpScale = 0.5;
 				var walltmp = new THREE.Mesh(wallGeometry, wallMat);
 				return walltmp;
 			}
