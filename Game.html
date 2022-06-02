@@ -1018,11 +1018,25 @@
 				}
 				);
 
+				//----------------------------------------------------------------------------------------
+
 				// Add lights
 				let hemiLight = new THREE.HemisphereLight(0x808080, 0x000000, 0.9);
 				hemiLight.position.set(0, 50, 0);
 				// Add hemisphere light to scene
 				scene.add(hemiLight);
+
+				//Create a PointLight and turn on shadows for the light
+				const pointLight = new THREE.PointLight(0xff0000, 1, 70);
+				pointLight.position.set(20, 0, 30);
+				//pointLight.castShadow = true;
+				scene.add(pointLight);
+
+				const sphereSize = 0.1;
+				const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+				scene.add(pointLightHelper)
+
+				//-----------------------------------------------------------------------------------------
 
 				//control keys
 				const keysPressed ={ };
@@ -1088,6 +1102,10 @@
 					renderer.render(scene,cameraTop);
 
 					renderer.setScissorTest(false);
+
+					//to render point light shadows
+					renderer.shadowMap.enabled = true;
+					renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 					requestAnimationFrame(animate);
 						
