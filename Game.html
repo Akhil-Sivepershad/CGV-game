@@ -74,13 +74,7 @@
 					this.cameraTop.lookAt(this.model.position);
 				}
 				
-				checkDeath(positionX,positionZ){
-					if(11<positionX&&positionX<29&&21<positionZ&&positionZ<39){
-						//175,175
-						window.alert("You have died!\nFires are quite dangerous...");
-						document.location.reload()
-					}					
-				}
+			
 				//event that updates model and camera
 				update(delta, keysPressed){//delta is frame number
 					var directionPressed=null;
@@ -134,7 +128,6 @@
             			const moveZ = this.walkDirection.z * this.velocity * delta
             			this.modelBody.position.x -= moveX
             			this.modelBody.position.z -= moveZ
-						this.checkDeath(this.modelBody.position.x,this.modelBody.position.z);
             			//move the camera with them
 						this.updateCameraTarget(moveX,moveZ);
 					}
@@ -161,12 +154,20 @@
 			var modelBody, model, skyBox, fire, level, exit;
 			level = 1;
 
-			function checkLevel(positionX,positionZ){
+			function checkPosition(positionX,positionZ){
 				if(level==3){
 					//block the exit
 					//scene.add(wallShort().translateX(175).translateZ(160).rotateY(Math.PI / 2))
 					scene.remove(exit)
 				}
+
+				
+				if(11<positionX&&positionX<29&&21<positionZ&&positionZ<39){ //walk into fire is warm
+					//175,175
+					window.alert("You have died!\nFires are quite dangerous...");
+					document.location.reload()
+				}					
+				
 
 				if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30&&level == 1){ //checks if first level has been completed
 					//175,175
@@ -182,7 +183,7 @@
 				}	
 				else if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175&& level == 3){ //checks if final level has been completed
 					//175,175
-					window.alert("Congratulations, Challenger\nYou have won the game!");
+					window.alert("Congratulations, Challenger\nYou have successfully escaped the maze!\nYou have won the game!");
 					document.location.reload();
 				}	
 			}
@@ -1117,7 +1118,7 @@
 
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
-						checkLevel(model.position.x,model.position.z);
+						checkPosition(model.position.x,model.position.z);
 					}//only copies the position if the model has loaded
 					
 					//updates the player movement
