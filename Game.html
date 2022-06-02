@@ -69,8 +69,9 @@
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
 
-					this.cameraTop.position.x -= moveX
-					this.cameraTop.position.z -= moveZ
+					this.cameraTop.position.x = this.model.position.x
+					this.cameraTop.position.z = this.model.position.z
+					this.cameraTop.lookAt(this.model.position);
 				}
 				checkFinished(positionX,positionZ){
 					if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175){
@@ -1045,7 +1046,7 @@
 				//for the background sound
 				//creates a nonpositional global audio object
 				const bgSound = new THREE.Audio(listener);
-				scene.add(bgSound);
+				//scene.add(bgSound);
 
 				//load the sound files
 				audioLoader.load("Sounds/Harry Potter Theme Song.mp3", function (buffer) {
@@ -1054,6 +1055,7 @@
 				bgSound.setVolume(0.5); //volume is 0-1
 				bgSound.play(); //starts the sound now
 				});
+				scene.add(bgSound);
 				//-----------------------------------------------------------------------------------------------------------
 
 				function animate() {
