@@ -1030,6 +1030,10 @@
 				
 				model.position.copy(modelBody.position); //makes the model position the same as the modelBody
 				model.quaternion.copy(modelBody.quaternion); //makes the model position the same as the modelBody
+				
+				model.castShadow = true; //to enable shadows - default is false 
+				model.receiveShadow = true; //to enable shadows - default
+				
 				scene.add(model);
 		
 				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);
