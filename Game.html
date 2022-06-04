@@ -145,13 +145,15 @@
 			scene.background = new THREE.Color("black");
 
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire, puddle, level, exit;
+			var modelBody, model, skyBox, fire, puddle, level, exit, keysPressed;
 			level = 1;
 
-			function checkPosition(positionX,positionZ){
+			function levelControl(model,camera,cameraTop,controls){
+				let positionX=model.position.x;
+				let positionZ=model.position.z;
+				
 				if(level==3){
-					//block the exit
-					//scene.add(wallShort().translateX(175).translateZ(160).rotateY(Math.PI / 2))
+					//unblock the exit
 					scene.remove(exit)
 				}
 
@@ -165,21 +167,42 @@
 
 				if(-10<positionX&&positionX<0&&10<positionZ&&positionZ<30&&level == 1){ //checks if first level has been completed
 					//175,175
+					changePosition(model,camera,cameraTop,controls,0,-0.2,30,0,20,35)//move to look at fire
+					keysPressed ={ };//clear the event listner
 					window.alert("You've made it to the centre. Congrats");
 					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
 					level++;
+					
 				}
 				else if(-70>positionX&&positionX>-80&&-60>positionZ&&positionZ>-70&& level == 2){ //checks if second level has been completed
 					//175,175
+					keysPressed ={ };
 					window.alert("Congrats you have found the water\nUnfortunately...");
 					window.alert("You took too long, the maze people have died in the fire.\nEscape the maze without disturbing the ghosts");
 					level++;
 				}	
 				else if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175&& level == 3){ //checks if final level has been completed
 					//175,175
+					keysPressed ={ };
 					window.alert("Congratulations, Challenger\nYou have successfully escaped the maze!\nYou have won the game!");
 					document.location.reload();
 				}	
+			}
+
+			function changePosition(model,camera,cameraTop,controls,x,y,z,cx,cy,cz){
+				camera.position.y = cy;		//position camera and orbit controls
+				camera.position.z = cz;
+				controls.target=new THREE.Vector3(x,15,z);
+				controls.update()
+
+				cameraTop.position.x = x; //above position of model
+				cameraTop.position.y = 30;//standard height
+				cameraTop.position.z = z;
+				cameraTop.lookAt(x,y,z);
+
+				model.position.x = x; //position of model
+				model.position.y = y;
+				model.position.z = z;				
 			}
 
 
@@ -1023,7 +1046,7 @@
 				modelBody.position.z = -95;
 				//modelBody.position.x = -75;
 				//modelBody.position.y = -0.2;
-				//modelBody.position.z = -60;
+				//modelBody.position.z = -60;				
 
 				modelBody.linearDamping = 0.9999; //prevents the body from accelerating infinitely after a collision
 				world.addBody(modelBody);
@@ -1113,7 +1136,7 @@
 				Dlight.shadow.camera.far = 500; // default
 
 				//control keys------------------------------------------------------------------------------
-				const keysPressed ={ };
+				keysPressed ={ };
 				document.addEventListener('keydown', (event)=>{
 					(keysPressed)[event.key.toLowerCase()]=true
 				},false);
@@ -1151,7 +1174,7 @@
 
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
-						checkPosition(model.position.x,model.position.z);
+						levelControl(modelBody,camera,cameraTop,controls);//check if completed level or died		
 					}//only copies the position if the model has loaded
 					
 					//updates the player movement
