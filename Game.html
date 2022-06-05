@@ -3,11 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
+		<link rel="stylesheet" href="style.css">
 		<style>
 			body { margin: 0; }
 		</style>
 	</head>
 	<body>
+		<!-- Text area for timer -->
+		<div id="timer"style="width:100%;height:50px;top:50px;text-align: center; color:white;" class="ui">10:00</div>
+		
 		<script type="module">
 			import * as THREE from "../Js/three.module.js";
 			import * as CANNON from "../Js/cannon-es.js";
@@ -16,6 +20,9 @@
 			import { GLTFLoader } from "../Js/GLTFLoader.js";
 			
 			let insetWidth = window.innerWidth/4, insetHeight = window.innerHeight/4;
+
+			//Getting dom element for text box to display time for the timer
+			const timerTextBox = document.getElementsByTagName("timer");
 
 			const canvas = document.querySelector('#c');
 			
@@ -172,7 +179,8 @@
 					window.alert("You've made it to the centre. Congrats");
 					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
 					level++;
-					
+
+					//timerTextBox.innerHTML = `<span style="background-color: lime">Replacement values</span>`;
 				}
 				else if(-70>positionX&&positionX>-80&&-60>positionZ&&positionZ>-70&& level == 2){ //checks if second level has been completed
 					//175,175
