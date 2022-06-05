@@ -9,3 +9,7 @@ Skybox texture - https://opengameart.org/content/night-sky-stars-and-galaxies
 Witch - https://creazilla.com/nodes/64224-cartoon-witch-character-3d-model
 
 character controls made with help from Genka https://youtu.be/C3s0UHpwlf8
+
+3D model downloaded from https://sketchfab.com/3d-models/ghost-383d9cdb6bb34285843a50b637e372ec
+
+3D model downloaded from https://sketchfab.com/3d-models/bonfire-dark-souls-a090bdd8ca6841d1855f3d998697706b

@@ -151,9 +151,18 @@
 			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
 
+			//global variables for timer in level 3
+			var clock = new THREE.Clock();
+			var speed = 2; //number of units a second
+			var delta = 0; //elapsed time
 			//global variables for model and the physics body of the model
 			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed;
 			level = 1;
+
+			function timer(){
+				delta = clock.getDelta();
+  				// object.position.z += speed * delta;
+			}
 
 			function levelControl(model,camera,cameraTop,controls){
 				let positionX=model.position.x;
@@ -1062,7 +1071,7 @@
 				model.position.copy(modelBody.position); //makes the model position the same as the modelBody
 				model.quaternion.copy(modelBody.quaternion); //makes the model position the same as the modelBody
 				
-				model.castShadow = true; //to enable shadows - default is false 
+				//model.castShadow = true; //to enable shadows - default is false 
 				model.receiveShadow = true; //to enable shadows - default
 				
 				scene.add(model);
@@ -1083,9 +1092,9 @@
 				gltf.scene.scale.set(5,5,5);
 				gltf.scene.position.x = 20;
 				gltf.scene.position.z = 30;
-				
-				fire.castShadow = true; //to enable shadows - default is false 
-				fire.receiveShadow = true; //to enable shadows - default
+				//fire.setPosition(0,0,30);
+				//fire.castShadow = true; //to enable shadows - default is false 
+				//fire.receiveShadow = true; //to enable shadows - default
 				scene.add(fire);
 				
 				},
@@ -1115,13 +1124,13 @@
 				);
 
 				//Loading ghost model into the the maze----------------------------------------
-				loader.load("Object_models/peng_ghost/scene.gltf",
+				loader.load("Object_models/ghost/scene.gltf",
 					(gltf) => {
 						ghost = gltf.scene;
-						gltf.scene.scale.set(0.09, 0.09, 0.09);
+						gltf.scene.scale.set(0.05, 0.05, 0.05);
 
 						gltf.scene.position.x = 5;
-						gltf.scene.position.y = 0;
+						gltf.scene.position.y = 5;
 						gltf.scene.position.z = 30;
 						
 						scene.add(ghost);
