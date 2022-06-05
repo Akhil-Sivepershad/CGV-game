@@ -145,7 +145,7 @@
 			scene.background = new THREE.Color("black");
 
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire, puddle, level, exit, keysPressed;
+			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed;
 			level = 1;
 
 			function levelControl(model,camera,cameraTop,controls){
@@ -1087,16 +1087,36 @@
 				}
 				);
 
-				//Loading puddle model into the centre of the maze----------------------------------------
+				//Loading puddle model into the the maze----------------------------------------
 				loader.load("Object_models/low_poly_-_puddle/scene.gltf",
 					(gltf) => {
 						puddle = gltf.scene;
 						gltf.scene.scale.set(0.03, 0.03, 0.03);
 
 						gltf.scene.position.x = -90;
-						gltf.scene.position.z = -65;
 						gltf.scene.position.y = 2;
+						gltf.scene.position.z = -65;
+						
 						scene.add(puddle);
+
+					},
+					undefined,
+					function (error) {
+						console.error(error);
+					}
+				);
+
+				//Loading ghost model into the the maze----------------------------------------
+				loader.load("Object_models/peng_ghost/scene.gltf",
+					(gltf) => {
+						ghost = gltf.scene;
+						gltf.scene.scale.set(0.09, 0.09, 0.09);
+
+						gltf.scene.position.x = 5;
+						gltf.scene.position.y = 0;
+						gltf.scene.position.z = 30;
+						
+						scene.add(ghost);
 
 					},
 					undefined,
