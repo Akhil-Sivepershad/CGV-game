@@ -986,7 +986,6 @@
 				renderer.shadowMap.enabled = true; //to render point light shadows
 				renderer.shadowMap.type = THREE.PCFSoftShadowMap; //to render point light shadows
 				renderer.setSize(window.innerWidth,window.innerHeight);
-				renderer.shadowMap.enabled = true;
 				renderer.setPixelRatio(window.devicePixelRatio);
 				document.body.appendChild(renderer.domElement);
 
@@ -1216,6 +1215,8 @@
 					renderer.setViewport(0,0,window.innerWidth,window.innerHeight);
 					renderer.render(scene,camera);
 
+					renderer.shadowMap.enabled = false; //disable shadows to be rendered
+
 					renderer.clearDepth();
 					renderer.setScissorTest(true);
 					
@@ -1225,9 +1226,8 @@
 
 					renderer.setScissorTest(false);
 
-					//to render point light shadows
-					renderer.shadowMap.enabled = true;
-					renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+					renderer.shadowMap.enabled = true; //enable shadows to be rendered
+
 					requestAnimationFrame(animate);
 						
 				}
