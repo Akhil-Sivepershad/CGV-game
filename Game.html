@@ -3,11 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
+		<link rel="stylesheet" href="style.css">
 		<style>
 			body { margin: 0; }
 		</style>
 	</head>
 	<body>
+		<!-- Text area for timer -->
+		<div id="timer"style="width:100%;height:50px;top:50px;text-align: center; color:white;" class="ui"></div>
+	
 		<script type="module">
 			import * as THREE from "../Js/three.module.js";
 			import * as CANNON from "../Js/cannon-es.js";
@@ -17,9 +21,12 @@
 			
 			let insetWidth = window.innerWidth/4, insetHeight = window.innerHeight/4;
 
+			//Getting dom element for text box to display time for the timer
+			const timerTextBox = document.getElementById("timer");
+
 			const canvas = document.querySelector('#c');
 			
-
+			
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
 				
 				//temporary data
@@ -144,23 +151,39 @@
 			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
 
-			//global variables for timer in level 3
+			//global variables for timer in level 2 and 3
 			var clock = new THREE.Clock();
-			var speed = 2; //number of units a second
-			var delta = 0; //elapsed time
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed;
+			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed, totalTime;
 			level = 1;
-
-			function timer(){
-				delta = clock.getDelta();
-  				// object.position.z += speed * delta;
-			}
 
 			function levelControl(model,camera,cameraTop,controls){
 				let positionX=model.position.x;
 				let positionZ=model.position.z;
 				
+				//Function for the countdown timers for level 2 and 3
+				function levelTimer()
+				{	
+					//totalTime = 150;
+					function decrementTimer()
+					{
+						if(totalTime > 0 && level >= 2)
+						{
+							setTimeout(decrementTimer, 1000);
+							totalTime--;
+							timerTextBox.textContent = totalTime;
+							console.log(totalTime);
+						}
+						else if(totalTime<=0)
+						{
+							window.alert("You have run out of time!\nBetter luck next time.");
+							document.location.reload()
+						}
+					}
+					decrementTimer();
+				}
+
+
 				if(level==3){
 					//unblock the exit
 					scene.remove(exit)
@@ -181,7 +204,9 @@
 					window.alert("You've made it to the centre. Congrats");
 					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
 					level++;
-					//timer();
+
+					totalTime = 150;
+					levelTimer();//Calling level 2 timer function to start the timer.
 				}
 				else if(-70>positionX&&positionX>-80&&-60>positionZ&&positionZ>-70&& level == 2){ //checks if second level has been completed
 					//175,175
@@ -189,6 +214,9 @@
 					window.alert("Congrats you have found the water\nUnfortunately...");
 					window.alert("You took too long, the maze people have died in the fire.\nEscape the maze without disturbing the ghosts");
 					level++;
+
+					totalTime = 200;
+					//levelTimer();//Calling level 3 timer function to start the timer.
 				}	
 				else if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175&& level == 3){ //checks if final level has been completed
 					//175,175

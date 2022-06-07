@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap');
+
+body{
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+}
+.ui{
+    position: absolute;
+}
