@@ -223,7 +223,7 @@
 					changePosition(model,camera,cameraTop,controls,0,-0.2,30,0,20,35)//move to look at fire
 					keysPressed ={ };//clear the event listner
 					window.alert("You've made it to the centre. Congrats");
-					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
+					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out before the timer runs out!");
 					level++;
 					
 					totalTime = 180;//time to complete level 2
@@ -1107,7 +1107,6 @@
 				
 				modelBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
 				modelBB.setFromObject(model);
-				console.log(modelBB)
 
 				//model.castShadow = true; //to enable shadows - default is false 
 				model.receiveShadow = true; //to enable shadows - default
