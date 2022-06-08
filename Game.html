@@ -186,7 +186,7 @@
 				if(level==3){//animate ghost and check for colision
 					//only animate ghosts if on level 3
 					ghost.position.x=(4*clock.elapsedTime%300)-120//300 is total length of x axis, 120 is the lowest x value
-					ghost2.position.z=(4*clock.elapsedTime%275)-100
+					ghost2.position.z=(4*clock.elapsedTime%275)-100//275 is the length of y axis, -100 is the lowest y value
 					if(modelBB.intersectsBox(ghostBB)){	//check for colision
 						window.alert('The ghost has eaten you')
 						document.location.reload()
@@ -1168,8 +1168,6 @@
 						ghostBB.setFromObject(ghost);
 						//console.log(ghostBB)
 						scene.add(ghost);
-						
-
 					},
 					undefined,
 					function (error) {
@@ -1189,8 +1187,6 @@
 						ghost2BB.setFromObject(ghost);
 						//console.log(ghostBB)
 						scene.add(ghost2);
-						
-
 					},
 					undefined,
 					function (error) {
@@ -1274,11 +1270,11 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					
-					if(modelBB){
+					if(modelBB){//sync model border box to models position
 						modelBB.setFromObject(model);
 					}
 					if(ghostBB){
-						ghostBB.setFromObject(ghost);
+						ghostBB.setFromObject(ghost);//sync ghost border box to ghost position
 					}
 					if(ghost2BB){
 						ghostBB.setFromObject(ghost2);
