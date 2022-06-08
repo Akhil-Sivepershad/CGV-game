@@ -68,17 +68,17 @@
 				}
 				//updates the camera position, and orbit controls
 				updateCameraTarget(moveX, moveZ) {
-					this.camera.position.x -= moveX
+					this.camera.position.x -= moveX//move camer
             		this.camera.position.z -= moveZ
-					// update camera target
-					this.cameraTarget.x = this.model.position.x
+					t
+					this.cameraTarget.x = this.model.position.x// update camera target
 					this.cameraTarget.y = this.model.position.y+15 
 					this.cameraTarget.z = this.model.position.z
 					this.orbitControl.target = this.cameraTarget
 
-					this.cameraTop.position.x = this.model.position.x
+					this.cameraTop.position.x = this.model.position.x//move top camera
 					this.cameraTop.position.z = this.model.position.z
-					this.cameraTop.lookAt(this.model.position);
+					this.cameraTop.lookAt(this.model.position);//update top camera target
 				}
 							
 				//event that updates model and camera
@@ -129,12 +129,12 @@
             			this.walkDirection.applyAxisAngle(this.rotateAngle, directionOffset)
 
 						//move model and camera
-						const moveX = this.walkDirection.x * this.velocity * delta
+						const moveX = this.walkDirection.x * this.velocity * delta//calculate direction to move on x axis
             			const moveZ = this.walkDirection.z * this.velocity * delta
-            			this.modelBody.position.x -= moveX
+            			this.modelBody.position.x -= moveX//update position of model
             			this.modelBody.position.z -= moveZ
             			//move the camera with them
-						this.updateCameraTarget(moveX,moveZ);
+						this.updateCameraTarget(moveX,moveZ);//call function to update multiple camera position and targets
 					}
 				}
 			}
@@ -158,7 +158,7 @@
 			var modelBody, model, skyBox, fire, puddle, level, exit, keysPressed, totalTime, modelBB, ghost, ghostBB, ghost2, ghost2BB;
 			level = 1;
 
-			function levelControl(model,camera,cameraTop,controls, modelBB, ghostBB){
+			function levelControl(model,camera,cameraTop,controls, modelBB, ghostBB){//function that controls all the levels and different ways character can die
 				let positionX=model.position.x;
 				let positionZ=model.position.z;
 				
@@ -236,7 +236,7 @@
 				}	
 			}
 
-			function changePosition(model,camera,cameraTop,controls,x,y,z,cx,cy,cz){
+			function changePosition(model,camera,cameraTop,controls,x,y,z,cx,cy,cz){//function used to move entire model and cameras to new position
 				camera.position.y = cy;		//position camera and orbit controls
 				camera.position.z = cz;
 				controls.target=new THREE.Vector3(x,15,z);
@@ -252,7 +252,7 @@
 				model.position.z = z;				
 			}
 
-			function wall(){
+			function wall(){//used to create a long wall, for the maze
 				var wallGeometry = new THREE.BoxGeometry(30,25,1);
 				var wallTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
 				wallTexture.wrapT = THREE.RepeatWrapping;
@@ -266,7 +266,7 @@
 				return walltmp;
 			}
 
-			function wallShort(){
+			function wallShort(){//used to create a short wall, for the maze
 				var wallGeometry = new THREE.BoxGeometry(10, 25, 1);
 				var wallTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
 				wallTexture.wrapT = THREE.RepeatWrapping;
@@ -282,12 +282,12 @@
 				return walltmp;
 			}
 
-			function physicsMaze(){
-				var wallShape = new CANNON.Box(new CANNON.Vec3(15,15,0.5));
-				var wallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,15,15));
+			function physicsMaze(){//function that creates the phsics maze
+				var wallShape = new CANNON.Box(new CANNON.Vec3(15,6,0.5));
+				var wallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,6,15));
 
-				var shortWallShape = new CANNON.Box(new CANNON.Vec3(5,15,0.5));
-				var shortWallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,15,5));
+				var shortWallShape = new CANNON.Box(new CANNON.Vec3(5,6,0.5));
+				var shortWallShapeRotated = new CANNON.Box(new CANNON.Vec3(0.5,6,5));
 				
 				var mazeBody = new CANNON.Body({
 					mass: 0,
@@ -631,7 +631,7 @@
 				return mazeBody;
 			}
 
-			function maze(){
+			function maze(){//function that returns a maze
 				var maze = new THREE.Object3D();
 				//exit of maze
 				exit=wallShort().translateX(175).translateZ(170).rotateY(Math.PI / 2)
@@ -1045,11 +1045,6 @@
 
 				//add orbit control-----------------------------------------------------------------------
 				let controls = new OrbitControls(camera, renderer.domElement);
-				//controls.addEventListener('change', renderer);
-				// controls.enabled = true;
-				// controls.minDistance = 40;
-				// controls.maxDistance = 100;
-
 				controls.enableDamping = true
 				controls.minDistance = 5
 				controls.maxDistance = 40
@@ -1088,10 +1083,7 @@
 				}) //physics body for model
 				modelBody.position.x = 130;
 				modelBody.position.y = -0.2;
-				modelBody.position.z = -95;
-				//modelBody.position.x = -75;
-				//modelBody.position.y = -0.2;
-				//modelBody.position.z = -60;				
+				modelBody.position.z = -95;				
 
 				modelBody.linearDamping = 0.9999; //prevents the body from accelerating infinitely after a collision
 				world.addBody(modelBody);
@@ -1108,8 +1100,7 @@
 				
 				scene.add(model);
 		
-				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);
-				
+				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);	
 				},
 				undefined,
 				function(error) {
@@ -1127,8 +1118,7 @@
 				//fire.setPosition(0,0,30);
 				//fire.castShadow = true; //to enable shadows - default is false 
 				//fire.receiveShadow = true; //to enable shadows - default
-				scene.add(fire);
-				
+				scene.add(fire);				
 				},
 				undefined,
 				function(error) {
@@ -1141,13 +1131,10 @@
 					(gltf) => {
 						puddle = gltf.scene;
 						gltf.scene.scale.set(0.03, 0.03, 0.03);
-
 						gltf.scene.position.x = -90;
 						gltf.scene.position.y = 2;
 						gltf.scene.position.z = -65;
-						
 						scene.add(puddle);
-
 					},
 					undefined,
 					function (error) {
@@ -1160,11 +1147,9 @@
 					(gltf) => {
 						ghost = gltf.scene;
 						gltf.scene.scale.set(0.05, 0.05, 0.05);
-
 						gltf.scene.position.x = 120;
 						gltf.scene.position.y = -10;
-						gltf.scene.position.z = -70;
-						
+						gltf.scene.position.z = -70;						
 						ghostBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
 						ghostBB.setFromObject(ghost);
 						//console.log(ghostBB)
@@ -1179,11 +1164,9 @@
 					(gltf) => {
 						ghost2 = gltf.scene;
 						ghost2.scale.set(0.05, 0.05, 0.05);
-
 						ghost2.position.x = 140;
 						ghost2.position.y = -10;
-						ghost2.position.z = -90;
-						
+						ghost2.position.z = -90;						
 						ghost2BB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
 						ghost2BB.setFromObject(ghost);
 						//console.log(ghostBB)
@@ -1226,12 +1209,12 @@
 				Dlight.shadow.camera.far = 500; // default
 
 				//control keys------------------------------------------------------------------------------
-				keysPressed ={ };
+				keysPressed ={ };//list that contains all keys pressed
 				document.addEventListener('keydown', (event)=>{
-					(keysPressed)[event.key.toLowerCase()]=true
+					(keysPressed)[event.key.toLowerCase()]=true//on keydown, store that key as true
 				},false);
 				document.addEventListener('keyup', (event)=>{
-					(keysPressed)[event.key.toLowerCase()]=false
+					(keysPressed)[event.key.toLowerCase()]=false//on keyup, store that key as false
 				},false);
 
 				//adding background music-------------------------------------------------------------------------------------
@@ -1250,7 +1233,10 @@
 				});
 				scene.add(bgSound);
 				//-----------------------------------------------------------------------------------------------------------
-
+				renderer.render(scene,camera);//render the first frame then send start message
+				window.alert("Welcome Challenger, you seem to have awoken in an unfamiliar area.\nMake your way to the center of the maze to get your bearings.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
+				
+				animate();//begin animation
 				function animate() {
 					//rotate the skybox
 					skyBox.rotation.y += 0.0001;
@@ -1258,7 +1244,6 @@
 					//physics updates:
 					//cannonDebugger.update(); //updates wireframe positions
 					world.step(timeStep);
-
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
 						levelControl(model,camera,cameraTop,controls,modelBB,ghostBB);
@@ -1268,7 +1253,7 @@
 					//updates the player movement
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
-						modelControls.update(mixerUpdateDelta, keysPressed);
+						modelControls.update(mixerUpdateDelta, keysPressed);//pass the clock delta and keys pressed into the update of the character control class
 					}
 					
 					if(modelBB){//sync model border box to models position
@@ -1281,30 +1266,24 @@
 						ghostBB.setFromObject(ghost2);
 					}
 
-					controls.update();
+					controls.update();//update orbit controls
+
 					//perspective camera view being rendered
 					renderer.setViewport(0,0,window.innerWidth,window.innerHeight);
 					renderer.render(scene,camera);
 
 					renderer.shadowMap.enabled = false; //disable shadows to be rendered
-
 					renderer.clearDepth();
-					renderer.setScissorTest(true);//Enabling scissor test to allow for both the top camera and perspective camera to be rendered in the same window
-					
+					renderer.setScissorTest(true);//Enabling scissor test to allow for both the top camera and perspective camera to be rendered in the same window					
 					renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
 					renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
-					renderer.render(scene,cameraTop);
-
+					renderer.render(scene,cameraTop);//ortho cam being rendered
 					renderer.setScissorTest(false);//Disabling scissor test to allow for both the top camera and perspective camera to be rendered in the same window on the next instance of the animate function
 
-					renderer.shadowMap.enabled = true; //enable shadows to be rendered
+					renderer.shadowMap.enabled = true; //enable shadows to be rendered for the main camera
 
-					requestAnimationFrame(animate);
-						
+					requestAnimationFrame(animate);						
 				}
-				renderer.render(scene,camera);
-				window.alert("Welcome Challenger, you seem to have awoken in an unfamiliar area.\nMake your way to the center of the maze to get your bearings.\nUse the arrow and mouse to move the character.\nPress R to reset the game");
-				animate();
 			}
 			
 			
