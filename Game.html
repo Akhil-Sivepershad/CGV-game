@@ -155,7 +155,9 @@
 			//clock used to animate model and ghosts
 			var clock = new THREE.Clock();
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire, puddle, level, exit, keysPressed, totalTime, modelBB, ghost, ghostBB, ghost2, ghost2BB, ghost3, ghost3BB;
+			var modelBody, model, skyBox, fire, puddle, level, exit, keysPressed, totalTime;
+			//global variables for ghosts and model border boxes
+			var modelBB, ghost, ghostBB, ghost2, ghost2BB, ghost3, ghost3BB, ghost4, ghost4BB;
 			level = 1;
 
 			function levelControl(model,camera,cameraTop,controls, modelBB, ghostBB){//function that controls all the levels and different ways character can die
@@ -189,6 +191,7 @@
 					ghost.position.x=(4*clock.elapsedTime%300)-120//300 is total length of x axis, 120 is the lowest x value
 					ghost2.position.z=(4*clock.elapsedTime%275)-100//275 is the length of z axis, -100 is the lowest y value
 					ghost3.position.x=(-4*clock.elapsedTime%300)+180//300 is the length of x axis, 180 is the biggest x value
+					ghost4.position.z=(4*clock.elapsedTime%275)-100//275 is the length of z axis, -100 is the lowest y value
 					if(modelBB.intersectsBox(ghostBB)){	//check for colision
 						window.alert('The ghost has eaten you')
 						document.location.reload()
@@ -198,7 +201,11 @@
 						document.location.reload()
 					}
 					if(modelBB.intersectsBox(ghost3BB)){	//check for colision
-						window.alert('Whoops\nYou have gotten too close to the ghost')
+						window.alert('Whoops!\nYou have gotten too close to the ghost')
+						document.location.reload()
+					}
+					if(modelBB.intersectsBox(ghost4BB)){	//check for colision
+						window.alert('You can now play with Casper...\nForever')
 						document.location.reload()
 					}
 				}
@@ -231,6 +238,7 @@
 					ghost.position.y = 5;//puts the ghosts into view
 					ghost2.position.y=5
 					ghost3.position.y=5
+					ghost4.position.y=5
 					totalTime = 250;//time to complete level 3
 					level++;
 				}	
@@ -1148,7 +1156,7 @@
 					}
 				);
 
-				//Loading ghost model into the the maze----------------------------------------
+				//Loading ghost models into the the maze----------------------------------------
 				loader.load("Object_models/ghost/scene.gltf",
 					(gltf) => {
 						ghost = gltf.scene;
@@ -1194,6 +1202,23 @@
 						ghost3BB.setFromObject(ghost);
 						//console.log(ghostBB)
 						scene.add(ghost3);
+					},
+					undefined,
+					function (error) {
+						console.error(error);
+					}
+				);
+				loader.load("Object_models/ghost/scene.gltf",
+					(gltf) => {
+						ghost4 = gltf.scene;
+						ghost4.scale.set(0.05, 0.05, 0.05);
+						ghost4.position.x = 3;
+						ghost4.position.y = -10;
+						ghost4.position.z = 160;						
+						ghost4BB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
+						ghost4BB.setFromObject(ghost);
+						//console.log(ghostBB)
+						scene.add(ghost4);
 					},
 					undefined,
 					function (error) {
@@ -1279,19 +1304,23 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);//pass the clock delta and keys pressed into the update of the character control class
 					}
 					
-					if(modelBB){//sync model border box to models position
-						modelBB.setFromObject(model);
+					if(level==3){//only sync border boxes if were on level 3
+						if(modelBB){//sync model border box to models position
+							modelBB.setFromObject(model);
+						}
+						if(ghostBB){
+							ghostBB.setFromObject(ghost);//sync ghost border box to ghost position
+						}
+						if(ghost2BB){
+							ghost2BB.setFromObject(ghost2);
+						}
+						if(ghost3BB){
+							ghost3BB.setFromObject(ghost3);
+						}
+						if(ghost4BB){
+							ghost4BB.setFromObject(ghost4);
+						}
 					}
-					if(ghostBB){
-						ghostBB.setFromObject(ghost);//sync ghost border box to ghost position
-					}
-					if(ghost2BB){
-						ghost2BB.setFromObject(ghost2);
-					}
-					if(ghost3BB){
-						ghost3BB.setFromObject(ghost3);
-					}
-
 					controls.update();//update orbit controls
 
 					//perspective camera view being rendered
