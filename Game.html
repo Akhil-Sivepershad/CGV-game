@@ -250,10 +250,6 @@
 				model.position.z = z;				
 			}
 
-			function animateGhost(){			
-				
-			}
-
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,25,1);
 				var wallTexture = new THREE.TextureLoader().load( "Textures/TexturesCom_BrickOldDirty0132_1_seamless_S.jpg" );
@@ -1109,7 +1105,6 @@
 				model.receiveShadow = true; //to enable shadows - default
 				
 				scene.add(model);
-				//scene.add(modelBB);
 		
 				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);
 				
@@ -1170,7 +1165,7 @@
 						
 						ghostBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
 						ghostBB.setFromObject(ghost);
-						console.log(ghostBB)
+						//console.log(ghostBB)
 						scene.add(ghost);
 						
 
@@ -1247,7 +1242,8 @@
 
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
-						levelControl(modelBody, camera, cameraTop, controls, modelBB, ghostBB);//check if completed level or died		
+						levelControl(model,camera,cameraTop,controls,modelBB,ghostBB);
+		
 					}//only copies the position if the model has loaded
 					
 					//updates the player movement
@@ -1256,11 +1252,14 @@
 						modelControls.update(mixerUpdateDelta, keysPressed);
 					}
 					
-					if(modelBB&&ghostBB){
-						modelBB.setFromObject(modelBody);
-						ghost.setFromObject(ghost);
-						
+					if(modelBB){
+						modelBB.setFromObject(model);
 					}
+
+					if(ghostBB){
+						ghostBB.setFromObject(ghost);
+					}
+
 					controls.update();
 					//perspective camera view being rendered
 					renderer.setViewport(0,0,window.innerWidth,window.innerHeight);
