@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>My first three.js Maze</title>
 		<link rel="stylesheet" href="style.css">
 		<style>
 			body { margin: 0; }
@@ -13,20 +13,20 @@
 		<div id="timer"style="width:100%;height:50px;top:50px;text-align: center; color:white;" class="ui"></div>
 	
 		<script type="module">
-			import * as THREE from "../Js/three.module.js";
-			import * as CANNON from "../Js/cannon-es.js";
+			import * as THREE from "../Js/three.module.js"; //Importing three library to allow for animated 3D graphics in a browser
+			import * as CANNON from "../Js/cannon-es.js"; //Importing cannon library for inclusion of a physics engine
 			import CannonDebugger from "../Js/cannon-es-debugger.js";
-			import { OrbitControls } from "../Js/OrbitControls.js";
-			import { GLTFLoader } from "../Js/GLTFLoader.js";
+			import { OrbitControls } from "../Js/OrbitControls.js"; //Importing orbit controls libray to allow user to manually adjust perspective of the scene
+			import { GLTFLoader } from "../Js/GLTFLoader.js"; //Importing GLTF loader to allow imports of 3D models of type .gltf
 			
-			let insetWidth = window.innerWidth/4, insetHeight = window.innerHeight/4;
+			let insetWidth = window.innerWidth/4, insetHeight = window.innerHeight/4; //Setting width and height of the top view camera
 
 			//Getting dom element for text box to display time for the timer
 			const timerTextBox = document.getElementById("timer");
 
 			const canvas = document.querySelector('#c');
 			
-			
+			//Class dedicated to the movement of the character and updating the perspective and orthograpic cameras
 			class CharacterControls{// made with help from Genka https://youtu.be/C3s0UHpwlf8
 				
 				//temporary data
@@ -38,7 +38,8 @@
 				//constants
 				fadeDuration =0.2
 				velocity=20
-
+				
+				//Initialising variables of CharacterControl class through constructor
 				constructor(model,camera,cameraTop,currentAction,orbitControl,modelBody){
 					this.model=model;
 					this.modelBody=modelBody
@@ -157,6 +158,7 @@
 			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed, totalTime;
 			level = 1;
 
+			//Function to manage the implementation of each level of the game
 			function levelControl(model,camera,cameraTop,controls){
 				let positionX=model.position.x;
 				let positionZ=model.position.z;
@@ -164,7 +166,7 @@
 				//Function for the countdown timers for level 2 and 3
 				function levelTimer()
 				{	
-					//totalTime = 150;
+					//Function to decrease value of totalTime variable by 1 every second and display it
 					function decrementTimer()
 					{
 						if(totalTime > 0 && level >= 2)
@@ -174,7 +176,7 @@
 							timerTextBox.textContent = totalTime;
 							console.log(totalTime);
 						}
-						else if(totalTime<=0)
+						else if(totalTime<=0) //Checking if player has run out of time and lost the game
 						{
 							window.alert("You have run out of time!\nBetter luck next time.");
 							document.location.reload()
@@ -235,7 +237,7 @@
 				cameraTop.position.x = x; //above position of model
 				cameraTop.position.y = 30;//standard height
 				cameraTop.position.z = z;
-				cameraTop.lookAt(x,y,z);
+				cameraTop.lookAt(x,y,z);//Updating target of the top camera
 
 				model.position.x = x; //position of model
 				model.position.y = y;
@@ -1246,13 +1248,13 @@
 					renderer.shadowMap.enabled = false; //disable shadows to be rendered
 
 					renderer.clearDepth();
-					renderer.setScissorTest(true);
+					renderer.setScissorTest(true);//Enabling scissor test to allow for both the top camera and perspective camera to be rendered in the same window
 					
 					renderer.setScissor(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
 					renderer.setViewport(window.innerWidth-insetWidth, window.innerHeight-insetHeight, insetWidth, insetHeight);
 					renderer.render(scene,cameraTop);
 
-					renderer.setScissorTest(false);
+					renderer.setScissorTest(false);//Disabling scissor test to allow for both the top camera and perspective camera to be rendered in the same window on the next instance of the animate function
 
 					renderer.shadowMap.enabled = true; //enable shadows to be rendered
 
