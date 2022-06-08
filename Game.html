@@ -68,9 +68,9 @@
 				}
 				//updates the camera position, and orbit controls
 				updateCameraTarget(moveX, moveZ) {
-					this.camera.position.x -= moveX//move camer
+					this.camera.position.x -= moveX//move camera
             		this.camera.position.z -= moveZ
-					t
+					
 					this.cameraTarget.x = this.model.position.x// update camera target
 					this.cameraTarget.y = this.model.position.y+15 
 					this.cameraTarget.z = this.model.position.z
@@ -1263,7 +1263,7 @@
 						ghostBB.setFromObject(ghost);//sync ghost border box to ghost position
 					}
 					if(ghost2BB){
-						ghostBB.setFromObject(ghost2);
+						ghost2BB.setFromObject(ghost2);
 					}
 
 					controls.update();//update orbit controls
