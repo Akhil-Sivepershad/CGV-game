@@ -151,13 +151,13 @@
 			const timeStep = 1/60;
 			scene.background = new THREE.Color("black");
 
-			//global variables for timer in level 2 and 3
+			//clock used to animate model and ghosts
 			var clock = new THREE.Clock();
 			//global variables for model and the physics body of the model
-			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed, totalTime;
+			var modelBody, model, skyBox, fire, puddle, ghost, level, exit, keysPressed, totalTime, modelBB, ghostBB;
 			level = 1;
 
-			function levelControl(model,camera,cameraTop,controls){
+			function levelControl(model,camera,cameraTop,controls, modelBB, ghostBB){
 				let positionX=model.position.x;
 				let positionZ=model.position.z;
 				
@@ -172,7 +172,6 @@
 							setTimeout(decrementTimer, 1000);
 							totalTime--;
 							timerTextBox.textContent = totalTime;
-							console.log(totalTime);
 						}
 						else if(totalTime<=0)
 						{
@@ -184,9 +183,18 @@
 				}
 
 
-				if(level==3){
-					//unblock the exit
-					scene.remove(exit)
+				if(level==2){//animate ghost and check for colision
+					//only animate ghosts if on level 3
+					
+
+					//modelBB.setFromObject(modelBody);//update boundary boxes for model and ghost
+					//modelBB.copy(model.geometry.boundingBox).applyMatrix4(model.matrixWorld)
+					//modelBB.position.copy(model.position)
+					//ghostBB.setFromObject(ghost)
+					ghost.position.x=(2*clock.elapsedTime%300)-120//300 is total length of x axis, 120 is the lowest x value
+					if(modelBB.intersectsBox(ghostBB)){	//check for colision
+						window.alert('intersection!')
+					}
 				}
 
 				
@@ -204,19 +212,19 @@
 					window.alert("You've made it to the centre. Congrats");
 					window.alert("Oh no! There appears to be a fire.\nGo find water to put it out!");
 					level++;
-
-					totalTime = 150;
-					levelTimer();//Calling level 2 timer function to start the timer.
+					
+					totalTime = 180;//time to complete level 2
+					levelTimer();//starts the timer
 				}
 				else if(-70>positionX&&positionX>-80&&-60>positionZ&&positionZ>-70&& level == 2){ //checks if second level has been completed
 					//175,175
 					keysPressed ={ };
 					window.alert("Congrats you have found the water\nUnfortunately...");
-					window.alert("You took too long, the maze people have died in the fire.\nEscape the maze without disturbing the ghosts");
+					window.alert("You took too long, the maze people have died in the fire.\nEscape the maze without disturbing the ghosts");				
+					scene.remove(exit)//unblocks the exit
+					//scene.add(ghost);//adds ghost
+					totalTime = 250;//time to complete level 3
 					level++;
-
-					totalTime = 200;
-					//levelTimer();//Calling level 3 timer function to start the timer.
 				}	
 				else if(173<positionX&&positionX<180&&165<positionZ&&positionZ<175&& level == 3){ //checks if final level has been completed
 					//175,175
@@ -242,6 +250,9 @@
 				model.position.z = z;				
 			}
 
+			function animateGhost(){			
+				
+			}
 
 			function wall(){
 				var wallGeometry = new THREE.BoxGeometry(30,25,1);
@@ -1090,10 +1101,15 @@
 				model.position.copy(modelBody.position); //makes the model position the same as the modelBody
 				model.quaternion.copy(modelBody.quaternion); //makes the model position the same as the modelBody
 				
+				modelBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
+				modelBB.setFromObject(model);
+				console.log(modelBB)
+
 				//model.castShadow = true; //to enable shadows - default is false 
 				model.receiveShadow = true; //to enable shadows - default
 				
 				scene.add(model);
+				//scene.add(modelBB);
 		
 				modelControls=new CharacterControls(model,camera,cameraTop,'idle',controls,modelBody);
 				
@@ -1148,11 +1164,15 @@
 						ghost = gltf.scene;
 						gltf.scene.scale.set(0.05, 0.05, 0.05);
 
-						gltf.scene.position.x = 5;
+						gltf.scene.position.x = 120;
 						gltf.scene.position.y = 5;
-						gltf.scene.position.z = 30;
+						gltf.scene.position.z = -70;
 						
+						ghostBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
+						ghostBB.setFromObject(ghost);
+						console.log(ghostBB)
 						scene.add(ghost);
+						
 
 					},
 					undefined,
@@ -1200,9 +1220,6 @@
 					(keysPressed)[event.key.toLowerCase()]=false
 				},false);
 
-				
-				const clock= new THREE.Clock();
-
 				//adding background music-------------------------------------------------------------------------------------
 				const listener = new THREE.AudioListener();
 				camera.add(listener);
@@ -1230,13 +1247,19 @@
 
 					if(model){
 						model.position.copy(modelBody.position); //makes the model position the same as the modelBody
-						levelControl(modelBody,camera,cameraTop,controls);//check if completed level or died		
+						levelControl(modelBody, camera, cameraTop, controls, modelBB, ghostBB);//check if completed level or died		
 					}//only copies the position if the model has loaded
 					
 					//updates the player movement
 					let mixerUpdateDelta = clock.getDelta();
 					if (modelControls){
 						modelControls.update(mixerUpdateDelta, keysPressed);
+					}
+					
+					if(modelBB&&ghostBB){
+						modelBB.setFromObject(modelBody);
+						ghost.setFromObject(ghost);
+						
 					}
 					controls.update();
 					//perspective camera view being rendered
