@@ -191,6 +191,10 @@
 						window.alert('The ghost has eaten you')
 						document.location.reload()
 					}
+					if(modelBB.intersectsBox(ghost2BB)){	//check for colision
+						window.alert('You have been slain')
+						document.location.reload()
+					}
 				}
 
 				
@@ -218,7 +222,8 @@
 					window.alert("Congrats you have found the water\nUnfortunately...");
 					window.alert("You took too long, the maze people have died in the fire.\nEscape the maze without disturbing the ghosts");				
 					scene.remove(exit)//unblocks the exit
-					//scene.add(ghost);//adds ghost
+					ghost.position.y = 5;//puts the ghosts into view
+					ghost2.position.y=5
 					totalTime = 250;//time to complete level 3
 					level++;
 				}	
@@ -1156,7 +1161,7 @@
 						gltf.scene.scale.set(0.05, 0.05, 0.05);
 
 						gltf.scene.position.x = 120;
-						gltf.scene.position.y = 5;
+						gltf.scene.position.y = -10;
 						gltf.scene.position.z = -70;
 						
 						ghostBB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
@@ -1177,7 +1182,7 @@
 						ghost2.scale.set(0.05, 0.05, 0.05);
 
 						ghost2.position.x = 140;
-						ghost2.position.y = 5;
+						ghost2.position.y = -10;
 						ghost2.position.z = -90;
 						
 						ghost2BB = new THREE.Box3(new THREE.Vector3(),new THREE.Vector3())
